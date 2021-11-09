@@ -79,7 +79,7 @@ bool GraphInsertEdge(Graph g, Edge e) {
 
     if (g->edges[e.v][e.w] == 0.0) {
         g->edges[e.v][e.w] = e.weight;
-        g->edges[e.w][e.v] = e.weight;
+        // g->edges[e.w][e.v] = e.weight; // Uncomment if undirected
         g->nE++;
         return true;
     } else {
@@ -93,7 +93,7 @@ bool GraphRemoveEdge(Graph g, Vertex v, Vertex w) {
 
     if (g->edges[v][w] != 0.0) {   // edge e in graph
         g->edges[v][w] = 0.0;
-        g->edges[w][v] = 0.0;
+        // g->edges[w][v] = 0.0;    // Uncomment if undirected
         g->nE--;
         return true;
     } else {
@@ -158,6 +158,51 @@ Edge createEdge(Vertex src, Vertex dst, double weight)
     e.w = dst;
     e.weight = weight;
     return e;
+}
+
+bool GraphEdgeExists(Graph g, Vertex start, Vertex dest)
+{
+    assert(validVertex(g, start));
+    assert(validVertex(g, dest));
+    return (g->edges[start][dest] != 0.0);
+}
+
+int outDegree(Graph g, Vertex v)
+{
+    int out = 0;
+    for (int w = 0; w < g->nV; w++)
+    {
+        if (g->edges[v][w] != 0.0)
+            out++;
+    }
+    return out;
+}
+
+int inDegree(Graph g, Vertex w)
+{
+    int in = 0;
+    for (int v = 0; v < g->nV; v++)
+    {
+        if (g->edges[w][v] != 0.0)
+            in++;
+    }
+    return in;
+}
+
+int *outDegreeArray(Graph g)
+{
+    int *out = malloc(sizeof(*out) * g->nV);
+    for (int i = 0; i < g->nV; i++)
+        out[i] = outDegree(g, i);
+    return out;
+}
+
+int *inDegreeArray(Graph g)
+{
+    int *in = malloc(sizeof(*in) * g->nV);
+    for (int i = 0; i < g->nV; i++)
+        in[i] = inDegree(g, i);
+    return in;
 }
 
 ////////////////////////////////////////////////////////////////////////

@@ -21,6 +21,27 @@ void fillGraph(Graph g, char **urls);
 void fillOutgoingLinks(Graph g, char **all_urls, char **outgoing_urls, int src_index);
 int urlToIndex(char **urls, char *target);
 
+void pageRankW(Graph g, double damp, double diffPR, int max_iterations);
+
+double calculatePR(Graph g,
+                   int num_urls,
+                   double damp,
+                   Vertex i,
+                   double *PR_prev,
+                   int *out_degrees,
+                   int *in_degrees);
+
+double calculateWeightSums(Graph g,
+                           int num_urls,
+                           Vertex i,
+                           double *PR_prev,
+                           int *out_degrees,
+                           int *in_degrees);
+double calculateWeightSum(Graph g, Vertex i, Vertex j, double *PR_prev, int *out_degrees, int *in_degrees);
+double calculateWeightOut(Graph g, Vertex i, Vertex j, int *out_degrees);
+double calculateWeightIn(Graph g, Vertex i, Vertex j, int *in_degrees);
+
+double *initArrayDoubles(int n, double init_value);
 
 int main(int argc, char *argv[])
 {
@@ -37,11 +58,134 @@ int main(int argc, char *argv[])
 
     // Fill graph
     fillGraph(g, urls);
-    printGraph(g);
+    GraphShow(g);
+    // printGraph(g);
+
+    // Run the pagerank algorithm
+    pageRankW(g, damping, diffPR, max_iterations);
+
     GraphFree(g);
     freeTokens(urls);
 
     return 0;
+}
+
+void pageRankW(Graph g, double damp, double diffPR, int max_iterations)
+{
+    int num_urls = GraphNumVertices(g);
+    double *PR_prev = initArrayDoubles(num_urls, (double)(1 / num_urls));
+    double *PR_new = initArrayDoubles(num_urls, (double)(0.0));
+    int iteration = 0;
+    double diff = diffPR;
+    int *out_degrees = outDegreeArray(g);
+    int *in_degrees = inDegreeArray(g);
+
+    while (iteration < max_iterations && diff >= diffPR)
+    {
+        for (int i = 0; i < num_urls; i++)
+        {
+            PR_new[i] = calculatePR(g, num_urls, i, damp, PR_prev, out_degrees, in_degrees);
+        }
+
+        // Make PR_new the old array.
+        swapDoublePointers(PR_new, PR_prev);
+        diff = calculateDiff(PR_prev, PR_new, num_urls);
+        iteration++;
+    }
+    return PR_prev;
+}
+
+void swapDoublePointers(double *a, double *b)
+{
+    double *temp = a;
+    a = b;
+    b = temp;
+}
+
+double calculateDiff(double *arr1, double *arr2, int n);
+{
+    double diff = 0;
+    for (int i = 0; i < n; i++)
+        diff += fabs(arr1[i] - arr2[i]);
+    return diff;
+}
+
+double calculatePR(Graph g,
+                   int num_urls,
+                   double damp,
+                   Vertex i,
+                   double *PR_prev,
+                   int *out_degrees,
+                   int *in_degrees)
+{
+    double constant = (double)((1 - damp) / num_urls);
+    double weight_sums = calculateWeightSums(g, num_urls, i, PR_prev, out_degrees, in_degrees);
+    return constant + (damp * weight_sums);
+}
+
+double calculateWeightSums(Graph g,
+                           int num_urls,
+                           Vertex i,
+                           double *PR_prev,
+                           int *out_degrees,
+                           int *in_degrees)
+{
+    double sums = 0.0;
+    for (int j = 0; j < num_urls; j++)
+    {
+        sums += calculateWeightSum(g, i, j, PR_prev, out_degrees, in_degrees);
+    }
+    return sums;
+}
+
+// ∑ p j ∈ M ( p i) P R ( p j , t) ∗ W i n ( p j , p i) ∗ W o u t ( p j , p i
+double calculateWeightSum(Graph g, Vertex i, Vertex j, double *PR_prev, int *out_degrees, int *in_degrees)
+{
+    // Sums for all p_j that are outbound to p_i
+    // If pj not inbound, return 0;
+    if (!GraphEdgeExists(g, j, i))
+        return 0.0;
+
+    double W_in = calculateWeightIn(g, i, j, in_degrees);
+    double W_out = calculateWeightOut(g, i, j, out_degrees);
+    return PR_prev[j] * W_in * W_out;
+}
+
+double calculateWeightOut(Graph g, Vertex i, Vertex j, int *out_degrees)
+{
+    int num_urls = GraphNumVertices(g);
+    int O_i = out_degrees[i];
+    int denom_sum = 0;
+    for (int k = 0; k < num_urls; k++)
+    {
+        // If edge from j->k, then add outsum of k. If outsum is 0, then add 0.5
+        if (GraphEdgeExists(g, j, k))
+            denom_sum += (out_degrees[k] == 0.0) ? 0.5 : out_degrees[k];
+    }
+    return (double)(O_i / denom_sum);
+}
+
+double calculateWeightIn(Graph g, Vertex i, Vertex j, int *in_degrees)
+{
+    int num_urls = GraphNumVertices(g);
+    int O_i = in_degrees[i];
+    int denom_sum = 0;
+    for (int k = 0; k < num_urls; k++)
+    {
+        // If edge from j->k, then add outsum of k. If outsum is 0, then add 0.5
+        if (GraphEdgeExists(g, j, k))
+            denom_sum += (in_degrees[k] == 0.0) ? 0.5 : in_degrees[k];
+    }
+    return (double)(O_i / denom_sum);
+}
+
+double *initArrayDoubles(int n, double init_value)
+{
+    double *arr = malloc(sizeof(*arr) * n);
+    assert(arr != NULL);
+    for (int i = 0; i < n; i++)
+        arr[i] = init_value;
+    return arr;
 }
 
 void fillGraph(Graph g, char **urls)
@@ -55,7 +199,7 @@ void fillGraph(Graph g, char **urls)
         printf("Looking for outoging in  %s\n", urls[i]);
         char **outgoing = outgoingLinks(urls[i]);
         fillOutgoingLinks(g, urls, outgoing, i);
-        freeTokens(outgoing); 
+        freeTokens(outgoing);
     }
 }
 
@@ -80,7 +224,7 @@ int urlToIndex(char **urls, char *target)
     // Loop through urls. If same as target, return it. Returns -1 on failur
     for (int i = 0; urls[i] != NULL; i++)
     {
-        int cmp =  strcmp(urls[i], target);
+        int cmp = strcmp(urls[i], target);
         if (!cmp)
             return i;
     }
@@ -94,9 +238,9 @@ void sanitiseArgs(int argc, char *argv[], double *damping, double *diffPR, int *
     *damping = strtod(argv[1], &endptr);
     if (endptr == NULL || endptr == argv[1])
         exitBadInput();
-    if (*damping < 0.0 || *damping > 1.0) 
+    if (*damping < 0.0 || *damping > 1.0)
         exitBadInput();
-    
+
     *diffPR = strtod(argv[2], &endptr);
     if (endptr == NULL || endptr == argv[2])
         exitBadInput();

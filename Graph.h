@@ -80,5 +80,12 @@ Edge createEdge(Vertex src, Vertex dst, double weight);
 
 
 void printGraph(Graph g);
+bool GraphEdgeExists(Graph g, Vertex start, Vertex dest);
+
+int outDegree(Graph g, Vertex v);
+int inDegree(Graph g, Vertex w);
+
+int *inDegreeArray(Graph g);
+int *outDegreeArray(Graph g);
 
 #endif

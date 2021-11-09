@@ -50,7 +50,7 @@ char **outgoingLinks(char *file)
     strcpy(filename, file);
     char *file_ext = ".txt";
     strcat(filename, file_ext);
-    printf("Scanning:\t %s\n", filename);
+    // printf("Scanning:\t %s\n", filename);
 
     // Open File and Get all the token from it
     char **outgoing_urls = doReadOutgoingLinks(filename);

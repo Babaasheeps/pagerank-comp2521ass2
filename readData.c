@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "readData.h"
+
+
 char **getLinkCollection(char *filename)
 {
     // Get length of the file
@@ -36,6 +38,51 @@ char *fileToString(char *filename, long file_len)
     printf("%s\n", s);
     fclose(f);
     return s;
+}
+
+
+char **outgoingLinks(char *file)
+{
+    // Create filename that is <file>.txt
+    char *filename = malloc(sizeof(*filename) * (MAX_URL_LEN + 1));
+    assert (filename != NULL);
+    // filename[0] = '\0';
+    strcpy(filename, file);
+    char *file_ext = ".txt";
+    strcat(filename, file_ext);
+    printf("Scanning:\t %s\n", filename);
+
+    // Open File and Get all the token from it
+    char **outgoing_urls = doReadOutgoingLinks(filename);
+    return outgoing_urls;
+}
+
+char **doReadOutgoingLinks(char *filename)
+{
+    long file_len = getFileLength(filename);
+    char *urlcontents = malloc(sizeof(*urlcontents) * (file_len + 1));
+    assert (urlcontents != NULL);
+    FILE *f = fopen(filename, "r");
+    assert (f != NULL);
+    // char *closing_line = "#end Section-1";
+    char *opening_line = "#start Section-1";
+
+    // Skip the first line, which is an opening Label
+    char *temp = malloc(sizeof(*temp) * (strlen(opening_line) + 1));
+    fgets(temp, file_len, f);
+
+    // Scan input till closing line reached
+    while (true)
+    {
+        temp = fgets(temp, file_len, f);
+        if (temp[0] == '#')
+            break;
+        strcpy(urlcontents, temp);
+    }
+    char **outgoing_urls = tokenize(urlcontents);
+    free(urlcontents);
+    free(temp);
+    return outgoing_urls;
 }
 
 long getFileLength(char *filename)

@@ -73,5 +73,12 @@ Graph  GraphMST(Graph g);
  */
 void   GraphShow(Graph g);
 
+/**
+ * Retuns an Edge Struct, filled with the provided information.
+ */
+Edge createEdge(Vertex src, Vertex dst, double weight);
+
+
+void printGraph(Graph g);
 
 #endif

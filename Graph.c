@@ -25,7 +25,7 @@ double *initInfArray(int n);
 
 // Edge popValidEdgePQ(PQ pq, bool *visited);
 // Edge failure();
-// void printGraph(Graph g);
+void printGraph(Graph g);
 // bool isFailure(Edge e);
 // void enqueueAdjacentEdgesPQ(PQ pq, Graph g, Vertex v);
 ////////////////////////////////////////////////////////////////////////
@@ -150,6 +150,15 @@ static bool doHasCycle(Graph g, Vertex v, Vertex prev, bool *visited) {
         }
     }
     return false;
+}
+
+Edge createEdge(Vertex src, Vertex dst, double weight)
+{
+    Edge e;
+    e.v = src;
+    e.w = dst;
+    e.weight = weight;
+    return e;
 }
 
 ////////////////////////////////////////////////////////////////////////

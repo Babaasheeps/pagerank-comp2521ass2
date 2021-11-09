@@ -17,7 +17,9 @@
 
 void sanitiseArgs(int argc, char *argv[], double *damping, double *diffPR, int *max_iterations);
 void exitBadInput();
-
+void fillGraph(Graph g, char **urls);
+void fillOutgoingLinks(Graph g, char **all_urls, char **outgoing_urls, int src_index);
+int urlToIndex(char **urls, char *target);
 
 
 int main(int argc, char *argv[])
@@ -34,13 +36,50 @@ int main(int argc, char *argv[])
     Graph g = GraphNew(num_urls);
 
     // Fill graph
-    
-    
-
+    fillGraph(g, urls);
+    printGraph(g);
     GraphFree(g);
     freeTokens(urls);
 
     return 0;
+}
+
+void fillGraph(Graph g, char **urls)
+{
+    int num_urls = GraphNumVertices(g);
+    printf("There are %d vert\n", num_urls);
+
+    // For all of the urls in collection.txt, fill out their outgoing links
+    for (int i = 0; urls[i] != NULL; i++)
+    {
+        printf("Looking for outoging in  %s\n", urls[i]);
+        char **outgoing = outgoingLinks(urls[i]);
+        fillOutgoingLinks(g, urls, outgoing, i);
+        freeTokens(outgoing); 
+    }
+}
+
+void fillOutgoingLinks(Graph g, char **all_urls, char **outgoing_urls, int src_index)
+{
+    // For all outgoing urls, find their index and insert edge
+    for (int i = 0; outgoing_urls[i] != NULL; i++)
+    {
+        int dest_index = urlToIndex(all_urls, outgoing_urls[i]);
+        Edge e = createEdge(src_index, dest_index, 1);
+        GraphInsertEdge(g, e);
+    }
+}
+
+int urlToIndex(char **urls, char *target)
+{
+    // Loop through urls. If same as target, return it. Returns -1 on failur
+    for (int i = 0; urls[i] != NULL; i++)
+    {
+        int cmp =  strcmp(urls[i], target);
+        if (!cmp)
+            return i;
+    }
+    return -1;
 }
 
 void sanitiseArgs(int argc, char *argv[], double *damping, double *diffPR, int *max_iterations)

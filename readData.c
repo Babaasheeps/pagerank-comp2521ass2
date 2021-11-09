@@ -118,3 +118,11 @@ void printTokens(char **tokens, bool is_comma_seperated)
     else
         printf("\t NULL\n]\n");
 }
+
+size_t countTokens(char **tokens)
+{
+    size_t i;
+    for (i = 0; tokens[i] != NULL; i++)
+        ;
+    return i;
+}

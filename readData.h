@@ -7,4 +7,5 @@ char *fileToString(char *filename, long file_len);
 char **tokenize(char *str);
 void freeTokens(char **tokens);
 void printTokens(char **tokens, bool is_comma_seperated);
+size_t countTokens(char **tokens);
 #endif // !READ_DATA

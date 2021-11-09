@@ -12,6 +12,8 @@
 #include <string.h>
 
 #include "readData.h"
+// #include "PQ.h"
+#include "Graph.h"
 
 void sanitiseArgs(int argc, char *argv[], double *damping, double *diffPR, int *max_iterations);
 void exitBadInput();
@@ -25,9 +27,20 @@ int main(int argc, char *argv[])
     double diffPR;
     int max_iterations;
     sanitiseArgs(argc, argv, &damping, &diffPR, &max_iterations);
-    printf("Got: %lf, %lf, %d\n", damping, diffPR, max_iterations);
+    // printf("Got: %lf, %lf, %d\n", damping, diffPR, max_iterations);
 
-    getLinkCollection("collection.txt");
+    char **urls = getLinkCollection("collection.txt");
+    int num_urls = (int)countTokens(urls);
+    Graph g = GraphNew(num_urls);
+
+    // Fill graph
+    
+    
+
+    GraphFree(g);
+    freeTokens(urls);
+
+    return 0;
 }
 
 void sanitiseArgs(int argc, char *argv[], double *damping, double *diffPR, int *max_iterations)

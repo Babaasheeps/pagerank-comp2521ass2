@@ -7,8 +7,9 @@
 #include <stdlib.h>
 
 #include "Graph.h"
-#include "PQ.h"
+// #include "PQ.h"
 #include <math.h>
+
 
 struct graph {
     int nV;         // #vertices
@@ -22,11 +23,11 @@ static int  validVertex(Graph g, Vertex v);
 double *initInfArray(int n);
 
 
-Edge popValidEdgePQ(PQ pq, bool *visited);
-Edge failure();
-void printGraph(Graph g);
-bool isFailure(Edge e);
-void enqueueAdjacentEdgesPQ(PQ pq, Graph g, Vertex v);
+// Edge popValidEdgePQ(PQ pq, bool *visited);
+// Edge failure();
+// void printGraph(Graph g);
+// bool isFailure(Edge e);
+// void enqueueAdjacentEdgesPQ(PQ pq, Graph g, Vertex v);
 ////////////////////////////////////////////////////////////////////////
 
 Graph GraphNew(int nV) {
@@ -152,103 +153,103 @@ static bool doHasCycle(Graph g, Vertex v, Vertex prev, bool *visited) {
 }
 
 ////////////////////////////////////////////////////////////////////////
-// Your task
-// ! Task 1
-// Returns the minimum spanning tree of the graph `g` using PRIM's
-// algorithmn w/ a priority queue.
-Graph GraphMST(Graph g)
-{
-    // Data structures to handle the PRIMS
-    Graph mst = GraphNew(g->nV);
-    PQ pq = PQNew();
-    bool *in_mst = malloc(g->nV * sizeof(*in_mst));
-    int used_v = 0;
+// // Your task
+// // ! Task 1
+// // Returns the minimum spanning tree of the graph `g` using PRIM's
+// // algorithmn w/ a priority queue.
+// Graph GraphMST(Graph g)
+// {
+//     // Data structures to handle the PRIMS
+//     Graph mst = GraphNew(g->nV);
+//     PQ pq = PQNew();
+//     bool *in_mst = malloc(g->nV * sizeof(*in_mst));
+//     int used_v = 0;
 
-    enqueueAdjacentEdgesPQ(pq, g, 0);        // Add neighbours of 0th vertex to PQ
-    in_mst[0] = true;
+//     enqueueAdjacentEdgesPQ(pq, g, 0);        // Add neighbours of 0th vertex to PQ
+//     in_mst[0] = true;
 
-    while (used_v < g->nV)
-    {
-        // Find e = {s, t, w} in unused st s in usedV and t not used 
-        // and w in min weight of all such edges
-        Edge e = popValidEdgePQ(pq, in_mst);
-        // printf("Edge is: (%d-%d)\n", e.v, e.w);
-        if (isFailure(e))
-            break;
+//     while (used_v < g->nV)
+//     {
+//         // Find e = {s, t, w} in unused st s in usedV and t not used 
+//         // and w in min weight of all such edges
+//         Edge e = popValidEdgePQ(pq, in_mst);
+//         // printf("Edge is: (%d-%d)\n", e.v, e.w);
+//         if (isFailure(e))
+//             break;
 
-        // Find the vertex that isnt in visited. PQ its neighbours
-        Vertex unvisited = (in_mst[e.v]) ? e.w : e.v;
-        enqueueAdjacentEdgesPQ(pq, g, unvisited);
-        in_mst[unvisited] = true;
+//         // Find the vertex that isnt in visited. PQ its neighbours
+//         Vertex unvisited = (in_mst[e.v]) ? e.w : e.v;
+//         enqueueAdjacentEdgesPQ(pq, g, unvisited);
+//         in_mst[unvisited] = true;
 
-        // Add edge to mst, then mark the vertexes as visited
-        GraphInsertEdge(mst, e);
-        used_v++;
-    }
-    free(in_mst);
-    // printGraph(mst);
-    return mst;
-}
+//         // Add edge to mst, then mark the vertexes as visited
+//         GraphInsertEdge(mst, e);
+//         used_v++;
+//     }
+//     free(in_mst);
+//     // printGraph(mst);
+//     return mst;
+// }
 
-// Initialises an array of `n` doubles, as infinite. Deprecated since PQ
-// being used instead
-double *initInfArray(int n)
-{
-    double *arr = malloc(sizeof(*arr) * n);
-    for (int i = 0; i < n; i++)
-        arr[i] = INFINITY;
-    return arr;
-}
+// // Initialises an array of `n` doubles, as infinite. Deprecated since PQ
+// // being used instead
+// double *initInfArray(int n)
+// {
+//     double *arr = malloc(sizeof(*arr) * n);
+//     for (int i = 0; i < n; i++)
+//         arr[i] = INFINITY;
+//     return arr;
+// }
 
-// Extracts from the priority queue till an edge is found such that
-// exactly on of its vertices has been visited.
-Edge popValidEdgePQ(PQ pq, bool *visited)
-{
-    while (!PQIsEmpty(pq))
-    {
-        // Find edge s.t. exactly one vertex is visited
-        Edge e = PQExtract(pq);
-        if (visited[e.v] != visited[e.w])
-            return e;
-    }
-    return failure();
-}
+// // Extracts from the priority queue till an edge is found such that
+// // exactly on of its vertices has been visited.
+// Edge popValidEdgePQ(PQ pq, bool *visited)
+// {
+//     while (!PQIsEmpty(pq))
+//     {
+//         // Find edge s.t. exactly one vertex is visited
+//         Edge e = PQExtract(pq);
+//         if (visited[e.v] != visited[e.w])
+//             return e;
+//     }
+//     return failure();
+// }
 
-// Returns a 'failure' Edge with both vectors as `-1` and infinite weight
-Edge failure()
-{
-    Edge failure;
-    failure.v = -1;
-    failure.w = -1;
-    failure.weight = INFINITY;
-    return failure;
-}
+// // Returns a 'failure' Edge with both vectors as `-1` and infinite weight
+// Edge failure()
+// {
+//     Edge failure;
+//     failure.v = -1;
+//     failure.w = -1;
+//     failure.weight = INFINITY;
+//     return failure;
+// }
 
-// Returns if the given edge `e` is a failure edge.
-bool isFailure(Edge e)
-{
-    if (e.v == -1 && e.w == -1 && e.weight == INFINITY)
-        return true;
-    return false;
-}
+// // Returns if the given edge `e` is a failure edge.
+// bool isFailure(Edge e)
+// {
+//     if (e.v == -1 && e.w == -1 && e.weight == INFINITY)
+//         return true;
+//     return false;
+// }
 
-// Inserts all edges adjacent (non-zero weighted) to the given vertex `v` into
-// the priority queue
-void enqueueAdjacentEdgesPQ(PQ pq, Graph g, Vertex v)
-{
-    int n = g->nV;
-    for (int i = 0; i < n; i++)
-    {
-        if (g->edges[i][v] == 0.0)
-            continue;
-        // Queue non empty edge
-        Edge e;
-        e.v = i;
-        e.w = v;
-        e.weight = g->edges[i][v];
-        PQInsert(pq, e);
-    }
-}
+// // Inserts all edges adjacent (non-zero weighted) to the given vertex `v` into
+// // the priority queue
+// void enqueueAdjacentEdgesPQ(PQ pq, Graph g, Vertex v)
+// {
+//     int n = g->nV;
+//     for (int i = 0; i < n; i++)
+//     {
+//         if (g->edges[i][v] == 0.0)
+//             continue;
+//         // Queue non empty edge
+//         Edge e;
+//         e.v = i;
+//         e.w = v;
+//         e.weight = g->edges[i][v];
+//         PQInsert(pq, e);
+//     }
+// }
 
 ////////////////////////////////////////////////////////////////////////
 

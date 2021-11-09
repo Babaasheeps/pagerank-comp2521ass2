@@ -121,6 +121,8 @@ void printTokens(char **tokens, bool is_comma_seperated)
 
 size_t countTokens(char **tokens)
 {
+    if (tokens == NULL)
+        return 0;
     size_t i;
     for (i = 0; tokens[i] != NULL; i++)
         ;

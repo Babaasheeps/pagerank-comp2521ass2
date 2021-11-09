@@ -9,6 +9,7 @@
 #define GRAPH_H
 
 #include <stdbool.h>
+// #include "PQ.h"
 
 typedef struct graph *Graph;
 
@@ -72,11 +73,5 @@ Graph  GraphMST(Graph g);
  */
 void   GraphShow(Graph g);
 
-
-Edge popValidEdgePQ(PQ pq, bool *visited);
-Edge failure();
-void printGraph(Graph g);
-bool isFailure(Edge e);
-void enqueueAdjacentEdgesPQ(PQ pq, Graph g, Vertex v);
 
 #endif

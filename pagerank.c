@@ -22,8 +22,10 @@ void fillOutgoingLinks(Graph g, char **all_urls, char **outgoing_urls, int src_i
 int urlToIndex(char **urls, char *target);
 
 double calculateDiff(double *arr1, double *arr2, int n);
-void swapDoublePointers(double *a, double *b);
+void swapDoublePointers(double **a, double **b);
 double *pageRankW(Graph g, double damp, double diffPR, int max_iterations);
+
+void printDoubleArr(double *arr, int n);
 
 double calculatePR(Graph g,
                    int num_urls,
@@ -90,20 +92,37 @@ double *pageRankW(Graph g, double damp, double diffPR, int max_iterations)
         }
 
         // Make PR_new the old array.
-        swapDoublePointers(PR_new, PR_prev);
         diff = calculateDiff(PR_prev, PR_new, num_urls);
+        printf("Diff is: %lf\n", diff);
         iteration++;
+        printDoubleArr(PR_new, num_urls);
+        printDoubleArr(PR_prev, num_urls);
+        swapDoublePointers(&PR_new, &PR_prev);
+        printf("SWAPPED: \n");
+        printDoubleArr(PR_new, num_urls);
+        printDoubleArr(PR_prev, num_urls);
+        printf("\n");
     }
     // Return the last edited array and free the other
     free(PR_new);
     return PR_prev;
 }
 
-void swapDoublePointers(double *a, double *b)
+void printDoubleArr(double *arr, int n)
 {
-    double *temp = a;
-    a = b;
-    b = temp;
+    printf("Array: [");
+    for (int i = 0; i < n; i++)
+    {
+        printf(" %lf, ", arr[i]);
+    }
+    printf("]\n");
+}
+
+void swapDoublePointers(double **a, double **b)
+{
+    double *temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
 double calculateDiff(double *arr1, double *arr2, int n)

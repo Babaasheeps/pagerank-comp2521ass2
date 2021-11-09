@@ -54,6 +54,8 @@ char **outgoingLinks(char *file)
 
     // Open File and Get all the token from it
     char **outgoing_urls = doReadOutgoingLinks(filename);
+    printf("Found\n");
+    printTokens(outgoing_urls, true);
     return outgoing_urls;
 }
 
@@ -75,11 +77,14 @@ char **doReadOutgoingLinks(char *filename)
     while (true)
     {
         temp = fgets(temp, file_len, f);
+        printf("temp is:%s\n", temp);
         if (temp[0] == '#')
             break;
-        strcpy(urlcontents, temp);
+        strcat(urlcontents, temp);
+        printf("Contents is now:%s\n", urlcontents); 
     }
     char **outgoing_urls = tokenize(urlcontents);
+    printf("Final URL CONTENTS:%s\n", urlcontents);
     free(urlcontents);
     free(temp);
     return outgoing_urls;
@@ -101,7 +106,7 @@ char **tokenize (char *str)
 {
     size_t n_tokens = 0;
     char **tokens = NULL;
-    char *sep = " ";
+    char *sep = " \n";
     while (*str != '\0')
     {
         // We are pointing at zero or more of any of the separators.

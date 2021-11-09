@@ -25,7 +25,6 @@ double *initInfArray(int n);
 
 // Edge popValidEdgePQ(PQ pq, bool *visited);
 // Edge failure();
-void printGraph(Graph g);
 // bool isFailure(Edge e);
 // void enqueueAdjacentEdgesPQ(PQ pq, Graph g, Vertex v);
 ////////////////////////////////////////////////////////////////////////
@@ -263,7 +262,12 @@ Edge createEdge(Vertex src, Vertex dst, double weight)
 ////////////////////////////////////////////////////////////////////////
 
 static int validVertex(Graph g, Vertex v) {
-    return v >= 0 && v < g->nV;
+
+    bool is_valid = (v >= 0 && v < g->nV);
+    if (is_valid)
+        return true;
+    printf("Invalid vertex: %d. Must be in range (0-%d)\n", v, g->nV);
+    return false;
 }
 
 void printGraph(Graph g)

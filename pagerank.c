@@ -65,13 +65,18 @@ void fillOutgoingLinks(Graph g, char **all_urls, char **outgoing_urls, int src_i
     for (int i = 0; outgoing_urls[i] != NULL; i++)
     {
         int dest_index = urlToIndex(all_urls, outgoing_urls[i]);
+        // Must ignore self-loops
+        if (dest_index == src_index)
+            continue;
         Edge e = createEdge(src_index, dest_index, 1);
+        printf("Edge: (%d-%d)\n", src_index, dest_index);
         GraphInsertEdge(g, e);
     }
 }
 
 int urlToIndex(char **urls, char *target)
 {
+    printf("Looking for %s\n", target);
     // Loop through urls. If same as target, return it. Returns -1 on failur
     for (int i = 0; urls[i] != NULL; i++)
     {

@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "readData.h"
+
 void sanitiseArgs(int argc, char *argv[], double *damping, double *diffPR, int *max_iterations);
 void exitBadInput();
 
@@ -24,6 +26,8 @@ int main(int argc, char *argv[])
     int max_iterations;
     sanitiseArgs(argc, argv, &damping, &diffPR, &max_iterations);
     printf("Got: %lf, %lf, %d\n", damping, diffPR, max_iterations);
+
+    getLinkCollection("collection.txt");
 }
 
 void sanitiseArgs(int argc, char *argv[], double *damping, double *diffPR, int *max_iterations)
@@ -39,7 +43,7 @@ void sanitiseArgs(int argc, char *argv[], double *damping, double *diffPR, int *
     *diffPR = strtod(argv[2], &endptr);
     if (endptr == NULL || endptr == argv[2])
         exitBadInput();
-    if (*diffPR < 1.0)
+    if (*diffPR < 0.0)
         exitBadInput();
 
     *max_iterations = (int)strtol(argv[3], &endptr, 10);

@@ -21,7 +21,9 @@ void fillGraph(Graph g, char **urls);
 void fillOutgoingLinks(Graph g, char **all_urls, char **outgoing_urls, int src_index);
 int urlToIndex(char **urls, char *target);
 
-void pageRankW(Graph g, double damp, double diffPR, int max_iterations);
+double calculateDiff(double *arr1, double *arr2, int n);
+void swapDoublePointers(double *a, double *b);
+double *pageRankW(Graph g, double damp, double diffPR, int max_iterations);
 
 double calculatePR(Graph g,
                    int num_urls,
@@ -70,7 +72,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void pageRankW(Graph g, double damp, double diffPR, int max_iterations)
+double *pageRankW(Graph g, double damp, double diffPR, int max_iterations)
 {
     int num_urls = GraphNumVertices(g);
     double *PR_prev = initArrayDoubles(num_urls, (double)(1 / num_urls));
@@ -92,6 +94,8 @@ void pageRankW(Graph g, double damp, double diffPR, int max_iterations)
         diff = calculateDiff(PR_prev, PR_new, num_urls);
         iteration++;
     }
+    // Return the last edited array and free the other
+    free(PR_new);
     return PR_prev;
 }
 
@@ -102,7 +106,7 @@ void swapDoublePointers(double *a, double *b)
     b = temp;
 }
 
-double calculateDiff(double *arr1, double *arr2, int n);
+double calculateDiff(double *arr1, double *arr2, int n)
 {
     double diff = 0;
     for (int i = 0; i < n; i++)

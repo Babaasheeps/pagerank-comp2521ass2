@@ -66,9 +66,10 @@ int main(int argc, char *argv[])
     // printGraph(g);
 
     // Run the pagerank algorithm
-    pageRankW(g, damping, diffPR, max_iterations);
+    double *ranks = pageRankW(g, damping, diffPR, max_iterations);
 
     GraphFree(g);
+    free(ranks);
     freeTokens(urls);
 
     return 0;
@@ -77,8 +78,15 @@ int main(int argc, char *argv[])
 double *pageRankW(Graph g, double damp, double diffPR, int max_iterations)
 {
     int num_urls = GraphNumVertices(g);
-    double *PR_prev = initArrayDoubles(num_urls, (double)(1 / num_urls));
+    printf("There are %d nodes in the graph.\n", num_urls);
+    double num_urls_recipricol = (double)(1 / num_urls);
+    printf("num_urls_recipricol is %lf\n", num_urls_recipricol);
+    printf("INitiating array prev\n");
+    double *PR_prev = initArrayDoubles(num_urls, num_urls_recipricol);
     double *PR_new = initArrayDoubles(num_urls, (double)(0.0));
+    printf("ON INITIALISATION\n");
+    printDoubleArr(PR_prev, num_urls);
+    printDoubleArr(PR_new, num_urls);
     int iteration = 0;
     double diff = diffPR;
     int *out_degrees = outDegreeArray(g);
@@ -93,15 +101,11 @@ double *pageRankW(Graph g, double damp, double diffPR, int max_iterations)
 
         // Make PR_new the old array.
         diff = calculateDiff(PR_prev, PR_new, num_urls);
-        printf("Diff is: %lf\n", diff);
+        // printf("Diff is: %lf\n", diff);
         iteration++;
         printDoubleArr(PR_new, num_urls);
         printDoubleArr(PR_prev, num_urls);
         swapDoublePointers(&PR_new, &PR_prev);
-        printf("SWAPPED: \n");
-        printDoubleArr(PR_new, num_urls);
-        printDoubleArr(PR_prev, num_urls);
-        printf("\n");
     }
     // Return the last edited array and free the other
     free(PR_new);
@@ -141,7 +145,7 @@ double calculatePR(Graph g,
                    int *out_degrees,
                    int *in_degrees)
 {
-    double constant = (double)((1 - damp) / num_urls);
+    double constant = (1.0 - damp) / num_urls;
     double weight_sums = calculateWeightSums(g, num_urls, i, PR_prev, out_degrees, in_degrees);
     return constant + (damp * weight_sums);
 }
@@ -154,9 +158,18 @@ double calculateWeightSums(Graph g,
                            int *in_degrees)
 {
     double sums = 0.0;
+    printf("FOR WEIGHT SUMS< PREV IS:\n");
+    printDoubleArr(PR_prev, num_urls);
     for (int j = 0; j < num_urls; j++)
     {
-        sums += calculateWeightSum(g, i, j, PR_prev, out_degrees, in_degrees);
+        // Sums for all p_j that are outbound to p_i
+        // If pj not inbound, return 0;
+        if (!GraphEdgeExists(g, j, i))
+            return 0.0;
+
+        double W_in = calculateWeightIn(g, i, j, in_degrees);
+        double W_out = calculateWeightOut(g, i, j, out_degrees);
+        sums += PR_prev[j] * W_in + W_out;
     }
     return sums;
 }
@@ -206,8 +219,12 @@ double *initArrayDoubles(int n, double init_value)
 {
     double *arr = malloc(sizeof(*arr) * n);
     assert(arr != NULL);
+    
     for (int i = 0; i < n; i++)
+    {
+        printf("Init value %d of %d with value %lf\n", i , n , init_value);
         arr[i] = init_value;
+    }
     return arr;
 }
 

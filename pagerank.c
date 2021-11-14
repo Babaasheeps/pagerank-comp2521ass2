@@ -15,6 +15,7 @@
 // #include "PQ.h"
 #include "Graph.h"
 
+
 void sanitiseArgs(int argc, char *argv[], double *damping, double *diffPR, int *max_iterations);
 void exitBadInput();
 void fillGraph(Graph g, char **urls);
@@ -26,6 +27,8 @@ void swapDoublePointers(double **a, double **b);
 double *pageRankW(Graph g, double damp, double diffPR, int max_iterations);
 
 void printDoubleArr(double *arr, int n);
+void printIntArr(int *arr, int n);
+void printFinalRanks(char **urls, int num_urls, int *out_degrees, double *ranks);
 
 double calculatePR(Graph g,
                    int num_urls,
@@ -54,20 +57,24 @@ int main(int argc, char *argv[])
     double diffPR;
     int max_iterations;
     sanitiseArgs(argc, argv, &damping, &diffPR, &max_iterations);
-    // printf("Got: %lf, %lf, %d\n", damping, diffPR, max_iterations);
 
     char **urls = getLinkCollection("collection.txt");
     int num_urls = (int)countTokens(urls);
     Graph g = GraphNew(num_urls);
+    printf("IN MAIN!!!!\n");
+    printTokens(urls, true);
 
     // Fill graph
     fillGraph(g, urls);
     GraphShow(g);
-    // printGraph(g);
+    printGraph(g);
 
     // Run the pagerank algorithm
     double *ranks = pageRankW(g, damping, diffPR, max_iterations);
+    int *out_degrees = outDegreeArray(g);
+    printFinalRanks(urls, num_urls, out_degrees, ranks);
 
+    free(out_degrees);
     GraphFree(g);
     free(ranks);
     freeTokens(urls);
@@ -79,7 +86,8 @@ double *pageRankW(Graph g, double damp, double diffPR, int max_iterations)
 {
     int num_urls = GraphNumVertices(g);
     printf("There are %d nodes in the graph.\n", num_urls);
-    double num_urls_recipricol = (double)(1 / num_urls);
+    double num_urls_recipricol = (double)(1.0 / num_urls);
+    printf("num_urls = %d\n", num_urls);
     printf("num_urls_recipricol is %lf\n", num_urls_recipricol);
     printf("INitiating array prev\n");
     double *PR_prev = initArrayDoubles(num_urls, num_urls_recipricol);
@@ -91,50 +99,28 @@ double *pageRankW(Graph g, double damp, double diffPR, int max_iterations)
     double diff = diffPR;
     int *out_degrees = outDegreeArray(g);
     int *in_degrees = inDegreeArray(g);
+    printf("OUT degree and INdegree are:\n");
+    printIntArr(out_degrees, num_urls);
+    printIntArr(in_degrees, num_urls);
 
     while (iteration < max_iterations && diff >= diffPR)
     {
         for (int i = 0; i < num_urls; i++)
         {
-            PR_new[i] = calculatePR(g, num_urls, i, damp, PR_prev, out_degrees, in_degrees);
+            PR_new[i] = calculatePR(g, num_urls, damp, i, PR_prev, out_degrees, in_degrees);
         }
 
         // Make PR_new the old array.
         diff = calculateDiff(PR_prev, PR_new, num_urls);
         // printf("Diff is: %lf\n", diff);
         iteration++;
-        printDoubleArr(PR_new, num_urls);
-        printDoubleArr(PR_prev, num_urls);
-        swapDoublePointers(&PR_new, &PR_prev);
+        // printDoubleArr(PR_new, num_urls);
+        // printDoubleArr(PR_prev, num_urls);
+        // swapDoublePointers(&PR_new, &PR_prev);
     }
     // Return the last edited array and free the other
-    free(PR_new);
+    // free(PR_new);
     return PR_prev;
-}
-
-void printDoubleArr(double *arr, int n)
-{
-    printf("Array: [");
-    for (int i = 0; i < n; i++)
-    {
-        printf(" %lf, ", arr[i]);
-    }
-    printf("]\n");
-}
-
-void swapDoublePointers(double **a, double **b)
-{
-    double *temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-double calculateDiff(double *arr1, double *arr2, int n)
-{
-    double diff = 0;
-    for (int i = 0; i < n; i++)
-        diff += fabs(arr1[i] - arr2[i]);
-    return diff;
 }
 
 double calculatePR(Graph g,
@@ -146,6 +132,7 @@ double calculatePR(Graph g,
                    int *in_degrees)
 {
     double constant = (1.0 - damp) / num_urls;
+    printf("constant is: %lf\n", constant);
     double weight_sums = calculateWeightSums(g, num_urls, i, PR_prev, out_degrees, in_degrees);
     return constant + (damp * weight_sums);
 }
@@ -158,17 +145,22 @@ double calculateWeightSums(Graph g,
                            int *in_degrees)
 {
     double sums = 0.0;
-    printf("FOR WEIGHT SUMS< PREV IS:\n");
-    printDoubleArr(PR_prev, num_urls);
+    // printf("FOR WEIGHT SUMS< PREV IS:\n");
+    // printDoubleArr(PR_prev, num_urls);
     for (int j = 0; j < num_urls; j++)
     {
         // Sums for all p_j that are outbound to p_i
         // If pj not inbound, return 0;
         if (!GraphEdgeExists(g, j, i))
-            return 0.0;
+        {
+            printf("No Edge from (%d, %d)\n", i, j);
+            continue;
+        }
 
         double W_in = calculateWeightIn(g, i, j, in_degrees);
+        printf("Weight in for (%d, %d): is %lf\n", j, i, W_in);
         double W_out = calculateWeightOut(g, i, j, out_degrees);
+        printf("For (%d,%d), (prev, in, out) is (%lf,%lf,%lf)\n",i, j, PR_prev[j], W_in, W_out);
         sums += PR_prev[j] * W_in + W_out;
     }
     return sums;
@@ -214,6 +206,41 @@ double calculateWeightIn(Graph g, Vertex i, Vertex j, int *in_degrees)
     }
     return (double)(O_i / denom_sum);
 }
+void printDoubleArr(double *arr, int n)
+{
+    printf("Array: [");
+    for (int i = 0; i < n; i++)
+    {
+        printf(" %lf, ", arr[i]);
+    }
+    printf("]\n");
+}
+
+void printIntArr(int *arr, int n)
+{
+    printf("Array: [");
+    for (int i = 0; i < n; i++)
+    {
+        printf(" %d, ", arr[i]);
+    }
+    printf("]\n");
+}
+
+void swapDoublePointers(double **a, double **b)
+{
+    double *temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+double calculateDiff(double *arr1, double *arr2, int n)
+{
+    double diff = 0;
+    for (int i = 0; i < n; i++)
+        diff += fabs(arr1[i] - arr2[i]);
+    return diff;
+}
+
 
 double *initArrayDoubles(int n, double init_value)
 {
@@ -293,6 +320,24 @@ void sanitiseArgs(int argc, char *argv[], double *damping, double *diffPR, int *
     if (*max_iterations < 0)
         exitBadInput();
 }
+
+void printFinalRanks(char **urls, int num_urls, int *out_degrees, double *ranks)
+{
+    assert (urls != NULL);
+    assert (out_degrees != NULL);
+    assert (ranks != NULL);
+
+    printf("\n--------------------------------\n");
+    printf("The Final Rankings Are\n");
+    for (int i = 0; i < num_urls; i++)
+    {
+        printf("%s, %d, %lf\n", urls[i], out_degrees[i], ranks[i]);
+    }
+    printf("\n--------------------------------\n");
+}
+
+
+
 
 void exitBadInput()
 {

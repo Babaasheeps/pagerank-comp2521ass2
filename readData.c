@@ -16,7 +16,7 @@ char **getLinkCollection(char *filename)
     char *file_str = fileToString(filename, file_length);
     char **urls = tokenize(file_str);
     free(file_str);
-    printTokens(urls, true);
+    // printTokens(urls, true);
     return urls;
 }
 
@@ -32,10 +32,10 @@ char *fileToString(char *filename, long file_len)
     {
         // Read char and turn all not alphanumeric to whitespace
         int c = fgetc(f);
-        printf("%d\t%c\n", i, c);
+        // printf("%d\t%c\n", i, c);
         s[i] = (isalnum(c)) ? c : ' ';
     }
-    printf("%s\n", s);
+    // printf("%s\n", s);
     fclose(f);
     return s;
 }
@@ -50,12 +50,12 @@ char **outgoingLinks(char *file)
     strcpy(filename, file);
     char *file_ext = ".txt";
     strcat(filename, file_ext);
-    // printf("Scanning:\t %s\n", filename);
+    printf("Scanning:\t %s\n", filename);
 
     // Open File and Get all the token from it
     char **outgoing_urls = doReadOutgoingLinks(filename);
-    printf("Found\n");
-    printTokens(outgoing_urls, true);
+    // printf("Found\n");
+    // printTokens(outgoing_urls, true);
     return outgoing_urls;
 }
 
@@ -77,14 +77,14 @@ char **doReadOutgoingLinks(char *filename)
     while (true)
     {
         temp = fgets(temp, file_len, f);
-        printf("temp is:%s\n", temp);
+        // printf("temp is:%s\n", temp);
         if (temp[0] == '#')
             break;
         strcat(urlcontents, temp);
-        printf("Contents is now:%s\n", urlcontents); 
+        // printf("Contents is now:%s\n", urlcontents); 
     }
     char **outgoing_urls = tokenize(urlcontents);
-    printf("Final URL CONTENTS:%s\n", urlcontents);
+    // printf("Final URL CONTENTS:%s\n", urlcontents);
     free(urlcontents);
     free(temp);
     return outgoing_urls;
@@ -158,11 +158,11 @@ void printTokens(char **tokens, bool is_comma_seperated)
     {
         if (is_comma_seperated)
         {
-            printf("%s , ", tokens[i]);
+            // printf("%s , ", tokens[i]);
         }
         else
         {
-            printf("\t%s\n", tokens[i]);
+            // printf("\t%s\n", tokens[i]);
         }
     }
     if (is_comma_seperated)

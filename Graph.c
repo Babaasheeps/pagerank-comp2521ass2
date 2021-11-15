@@ -16,6 +16,7 @@ struct graph {
     int nE;         // #edges
     double **edges; // adjacency matrix storing positive weights
                     // 0 if nodes not adjacent
+                    // Edge {v, w} means directed edge from v -> w
 };
 
 static bool doHasCycle(Graph g, Vertex v, Vertex prev, bool *visited);
@@ -178,10 +179,10 @@ int outDegree(Graph g, Vertex v)
     return out;
 }
 
-int inDegree(Graph g, Vertex w)
+int inDegree(Graph g, Vertex v)
 {
     int in = 0;
-    for (int v = 0; v < g->nV; v++)
+    for (int w = 0; w < g->nV; w++)
     {
         if (g->edges[w][v] != 0.0)
             in++;
@@ -236,7 +237,7 @@ int *inDegreeArray(Graph g)
 //         in_mst[unvisited] = true;
 
 //         // Add edge to mst, then mark the vertexes as visited
-//         GraphInsertEdge(mst, e);
+        // GraphInsertEdge(mst, e);
 //         used_v++;
 //     }
 //     free(in_mst);

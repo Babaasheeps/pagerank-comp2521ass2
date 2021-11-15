@@ -48,6 +48,14 @@ double calculateWeightSum(Graph g, Vertex i, Vertex j, double *PR_prev, int *out
 double calculateWeightOut(Graph g, Vertex i, Vertex j, int *out_degrees);
 double calculateWeightIn(Graph g, Vertex i, Vertex j, int *in_degrees);
 
+
+double **calculateW_ins(Graph g, int *in_degrees);
+double **calculateW_outs(Graph g, int *out_degrees);
+double **double2dArray(int h, int w, int initial);
+void printDoubleArr2d(double **arr, int h, int w);
+void freeDouble2dArray(double **arr, int h);
+
+
 double *initArrayDoubles(int n, double init_value);
 
 int main(int argc, char *argv[])
@@ -88,6 +96,9 @@ double *pageRankW(Graph g, double damp, double diffPR, int max_iterations)
     double num_urls_recipricol = (double)(1.0 / num_urls);
     double *PR_prev = initArrayDoubles(num_urls, num_urls_recipricol);
     double *PR_new = initArrayDoubles(num_urls, (double)(0.0));
+    printf("THE OLD AND NEW PR INIT:\n");
+    printDoubleArr(PR_prev, num_urls);
+    printDoubleArr(PR_new, num_urls);
     int iteration = 0;
     double diff = diffPR;
     int *out_degrees = outDegreeArray(g);
@@ -95,6 +106,8 @@ double *pageRankW(Graph g, double damp, double diffPR, int max_iterations)
     printf("OUT degree and INdegree are:\n");
     printIntArr(out_degrees, num_urls);
     printIntArr(in_degrees, num_urls);
+    double **W_ins = calculateW_ins(g, in_degrees);
+    double **W_outs = calculateW_outs(g, out_degrees);
 
     while (iteration < max_iterations && diff >= diffPR)
     {
@@ -109,6 +122,8 @@ double *pageRankW(Graph g, double damp, double diffPR, int max_iterations)
         iteration++;
     }
     // Return the last edited array and free the other
+    freeDouble2dArray(W_ins, num_urls);
+    freeDouble2dArray(W_outs, num_urls);
     free(out_degrees);
     free(in_degrees);
     free(PR_new);
@@ -170,6 +185,48 @@ double calculateWeightSums(Graph g,
 //     return PR_prev[j] * W_in * W_out;
 // }
 
+double **calculateW_ins(Graph g, int *in_degrees)
+{
+    int n = GraphNumVertices(g);
+    double **w_ins = double2dArray(n, n, 0.0);
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            // if no edge from j -> i; then no W_out
+            if (!GraphEdgeExists(g, j, i))
+                continue;
+            // Add weight (i, j) to weight array
+            w_ins[i][j] = calculateWeightIn(g, i, j, in_degrees);
+        }
+    }
+    printf("The WINS ARE:\n");
+    printDoubleArr2d(w_ins, n, n);
+    return w_ins;
+}
+
+double **calculateW_outs(Graph g, int *out_degrees)
+{
+    int n = GraphNumVertices(g);
+    double **w_outs = double2dArray(n, n, 0.0);
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            // if no edge from j -> i; then no W_out
+            if (!GraphEdgeExists(g, j, i))
+                continue;
+            // Add weight (i, j) to weight array
+            w_outs[i][j] = calculateWeightOut(g, i, j, out_degrees);
+        }
+    }
+    printf("THE WOUTS ARE:\n");
+    printDoubleArr2d(w_outs, n, n);
+    return w_outs;
+}
+
 double calculateWeightOut(Graph g, Vertex i, Vertex j, int *out_degrees)
 {
     int num_urls = GraphNumVertices(g);
@@ -179,7 +236,7 @@ double calculateWeightOut(Graph g, Vertex i, Vertex j, int *out_degrees)
     {
         // If edge from j->k, then add outsum of k. If outsum is 0, then add 0.5
         if (GraphEdgeExists(g, j, k))
-        denom_sum += (out_degrees[k] == 0.0) ? 0.5 : out_degrees[k];
+            denom_sum += (out_degrees[k] == 0.0) ? 0.5 : out_degrees[k];
     }
     return (((double) O_i )/ (denom_sum));
 }
@@ -193,7 +250,7 @@ double calculateWeightIn(Graph g, Vertex i, Vertex j, int *in_degrees)
     {
         // If edge from j->k, then add outsum of k. If outsum is 0, then add 0.5
         if (GraphEdgeExists(g, j, k))
-        denom_sum += (in_degrees[k] == 0.0) ? 0.5 : in_degrees[k];
+            denom_sum += (in_degrees[k] == 0.0) ? 0.5 : in_degrees[k];
     }
     return (((double) O_i / denom_sum));
 }
@@ -240,7 +297,6 @@ double *initArrayDoubles(int n, double init_value)
     
     for (int i = 0; i < n; i++)
     {
-        printf("Init value %d of %d with value %lf\n", i , n , init_value);
         arr[i] = init_value;
     }
     return arr;
@@ -327,8 +383,32 @@ void printFinalRanks(char **urls, int num_urls, int *out_degrees, double *ranks)
     printf("\n--------------------------------\n");
 }
 
+double **double2dArray(int h, int w, int initial)
+{
+    double **arr = malloc(sizeof(*arr) * h);
+    for (int i = 0; i < h; i++)
+        arr[i] = initArrayDoubles(w, initial);
 
+    return arr;
+}
 
+void freeDouble2dArray(double **arr, int h)
+{
+    for (int i = 0; i < h; i++)
+        free(arr[i]);
+    free(arr);
+}
+
+void printDoubleArr2d(double **arr, int h, int w)
+{
+    printf("[\n");
+    for (int i = 0; i < h; i++)
+    {
+        printf("    %d\t", i);
+        printDoubleArr(arr[i], w);
+    }
+    printf("]\n");
+}
 
 void exitBadInput()
 {

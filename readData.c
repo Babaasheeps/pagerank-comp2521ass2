@@ -50,7 +50,6 @@ char **outgoingLinks(char *file)
     strcpy(filename, file);
     char *file_ext = ".txt";
     strcat(filename, file_ext);
-    printf("Scanning:\t %s\n", filename);
 
     // Open File and Get all the token from it
     char **outgoing_urls = doReadOutgoingLinks(filename);
@@ -157,13 +156,9 @@ void printTokens(char **tokens, bool is_comma_seperated)
     for (int i = 0; tokens[i] != NULL; i++)
     {
         if (is_comma_seperated)
-        {
-            // printf("%s , ", tokens[i]);
-        }
+            printf("%s , ", tokens[i]);
         else
-        {
-            // printf("\t%s\n", tokens[i]);
-        }
+            printf("\t%s\n", tokens[i]);
     }
     if (is_comma_seperated)
         printf(" NULL ]\n");

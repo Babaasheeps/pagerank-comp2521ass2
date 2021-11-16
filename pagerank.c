@@ -99,7 +99,6 @@ int main(int argc, char *argv[])
 
     // Free Memory
     GraphFree(g);
-    // freeTokens(urls);
 
     return 0;
 }
@@ -127,8 +126,6 @@ double *pageRankW(Graph g, double damp, double diffPR, int max_iterations)
         for (int i = 0; i < num_urls; i++)
         {
             PR_new[i] = calculatePR(g, num_urls, damp, i, PR_prev, W_ins, W_outs);
-            printf("IT: %d\tFor i = %d, the rank is %lf\n", iteration, i, PR_new[i]);
-            printf("The old value was %lf\n", PR_prev[i]);
         }
         // Swap make new -> prev and prev-> new so that it can be written to
         swapDoublePointers(&PR_new, &PR_prev);
@@ -153,12 +150,10 @@ double calculatePR(Graph g,
 {
     double constant = (1.0 - damp) / num_urls;
 
-    printf("The previous rankings are:\n");
-    printDoubleArr(PR_prev, num_urls);
     double weight_sum = 0.0;
     for (int j = 0; j < num_urls; j++)
     {
-        // \sum_{j: edge j->i} PR_prev[j] * W_in(j, i) * W_out (j, i)
+        // Latex: \sum_{j: edge j->i} PR_prev[j] * W_in(j, i) * W_out (j, i)
         if (GraphEdgeExists(g, j, i))
         {
             weight_sum += PR_prev[j] * W_ins[j][i] * W_outs[j][i];
@@ -183,8 +178,6 @@ double **calculateW_ins(Graph g, int *in_degrees)
             w_ins[j][i] = calculateWeightIn(g, i, j, in_degrees);
         }
     }
-    printf("The WINS ARE:\n");
-    printDoubleArr2d(w_ins, n, n);
     return w_ins;
 }
 
@@ -203,8 +196,6 @@ double **calculateW_outs(Graph g, int *out_degrees)
                 w_outs[j][i] = calculateWeightOut(g, i, j, out_degrees);
         }
     }
-    printf("THE WOUTS ARE:\n");
-    printDoubleArr2d(w_outs, n, n);
     return w_outs;
 }
 
@@ -213,7 +204,6 @@ double calculateWeightOut(Graph g, Vertex i, Vertex j, int *out_degrees)
     int num_urls = GraphNumVertices(g);
     double O_i = (out_degrees[i] == 0) ? 0.5 : out_degrees[i];
     double denom_sum = 0;
-    printf("OI is %lf when (i,j) is (%d,%d)\n", O_i, i, j);
     for (int k = 0; k < num_urls; k++)
     {
         // If edge from j->k, then add outsum of k. If outsum is 0, then add 0.5
@@ -227,7 +217,6 @@ double calculateWeightIn(Graph g, Vertex i, Vertex j, int *in_degrees)
 {
     int num_urls = GraphNumVertices(g);
     int O_i = in_degrees[i];
-    printf("OI is %d when (i,j) is (%d,%d)\n", O_i, i, j);
     double denom_sum = 0;
     for (int k = 0; k < num_urls; k++)
     {
@@ -287,13 +276,8 @@ double *initArrayDoubles(int n, double init_value)
 
 void fillGraph(Graph g, char **urls)
 {
-    int num_urls = GraphNumVertices(g);
-    printf("There are %d vert\n", num_urls);
-
-    // For all of the urls in collection.txt, fill out their outgoing links
     for (int i = 0; urls[i] != NULL; i++)
     {
-        printf("Looking for outoging in  %s\n", urls[i]);
         char **outgoing = outgoingLinks(urls[i]);
         fillOutgoingLinks(g, urls, outgoing, i);
         freeTokens(outgoing);
@@ -310,14 +294,12 @@ void fillOutgoingLinks(Graph g, char **all_urls, char **outgoing_urls, int src_i
         if (dest_index == src_index)
             continue;
         Edge e = createEdge(src_index, dest_index, 1);
-        printf("Edge: (%d-%d)\n", src_index, dest_index);
         GraphInsertEdge(g, e);
     }
 }
 
 int urlToIndex(char **urls, char *target)
 {
-    printf("Looking for %s\n", target);
     // Loop through urls. If same as target, return it. Returns -1 on failur
     for (int i = 0; urls[i] != NULL; i++)
     {
@@ -424,21 +406,7 @@ Rank *sanitiseRankData(int num_urls, char **urls, int *out_degrees, double *rank
     free(out_degrees);
     free(ranks);
 
-    // Sort rank data by rank
-    qsort(ranks, num_urls, sizeof(Rank), compare_rank);
-
     return rank_data;
-}
-
-int compare_rank(const void * a, const void * b)
-{
-    //
-    Rank r1 = (Rank)a;
-    Rank r2 = (Rank)b;
-    // fputs(r2->url, stdout);
-    printf("%lf, %lf\n", r1->rank, r2->rank);
-    // printf("Comparing %s:%lf to %s:%lf\n", r1->url, r1->rank, r2->url, r2->rank);
-    return (r1->rank > r2->rank);
 }
 
 Rank newRank(char *url, int out_degree, double rank)
@@ -446,7 +414,6 @@ Rank newRank(char *url, int out_degree, double rank)
     Rank new = malloc(sizeof(*new));
     char *url_name = copyString(url);
     new->url = url_name;
-    printf("Copied: %s as %s. Stored as %s\n", url, url_name, new->url);
     new->out_degree = out_degree;
     new->rank = rank;
     return new;

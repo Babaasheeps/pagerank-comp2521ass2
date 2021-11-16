@@ -10,7 +10,6 @@ char **tokenize(char *str);
 void freeTokens(char **tokens);
 void printTokens(char **tokens, bool is_comma_seperated);
 size_t countTokens(char **tokens);
-
 char **outgoingLinks(char *file);
 char **doReadOutgoingLinks(char *filename);
 

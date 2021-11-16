@@ -40,6 +40,8 @@ Rank newRank(char *url, int out_degree, double rank);
 Rank *sanitiseRankData(int num_urls, char **urls, int *out_degrees, double *ranks);
 void printRankData(Rank *ranks, int n);
 
+int compare_rank(const void * a, const void * b);
+
 char *copyString(char *str);
 
 double calculatePR(Graph g,
@@ -67,6 +69,10 @@ void printDoubleArr2d(double **arr, int h, int w);
 void freeDouble2dArray(double **arr, int h);
 
 double *initArrayDoubles(int n, double init_value);
+void sortRankData(Rank *ranks, int n);
+void swapRanks(Rank *ranks, int i, int j);
+void freeRank(Rank r);
+void freeRanks(Rank *ranks, int n);
 
 int main(int argc, char *argv[])
 {
@@ -352,11 +358,47 @@ void printFinalRanks(char **urls, int num_urls, int *out_degrees, double *ranks)
     assert(ranks != NULL);
 
     Rank *rank_data = sanitiseRankData(num_urls, urls, out_degrees, ranks);
-    // sortRankData(ranks);
-
-    printf("\n--------------------------------\n");
+    sortRankData(rank_data, num_urls);
     printRankData(rank_data, num_urls);
-    printf("\n--------------------------------\n");
+    freeRanks(rank_data, num_urls);
+}
+
+void freeRanks(Rank *ranks, int n)
+{
+    for (int i = 0; i < n; i++)
+        freeRank(ranks[i]);
+    free(ranks);
+}
+
+void freeRank(Rank r)
+{
+    free(r->url);
+    free(r);
+}
+
+void sortRankData(Rank *ranks, int n)
+{
+    // return;
+    bool is_sorted = false;
+    while (!is_sorted)
+    {
+        is_sorted = true;
+        for (int i = 0; i < n - 1; i++)
+        {
+            if (ranks[i]->rank < ranks[i + 1]->rank)
+            {
+                swapRanks(ranks, i, i + 1);
+                is_sorted = false;
+            }
+        }
+    }
+}
+
+void swapRanks(Rank *ranks, int i, int j)
+{
+    Rank temp = ranks[i];
+    ranks[i] = ranks[j];
+    ranks[j] = temp;
 }
 
 void printRankData(Rank *ranks, int n)
@@ -382,9 +424,21 @@ Rank *sanitiseRankData(int num_urls, char **urls, int *out_degrees, double *rank
     free(out_degrees);
     free(ranks);
 
-    // Sort rank data by 
-    
+    // Sort rank data by rank
+    qsort(ranks, num_urls, sizeof(Rank), compare_rank);
+
     return rank_data;
+}
+
+int compare_rank(const void * a, const void * b)
+{
+    //
+    Rank r1 = (Rank)a;
+    Rank r2 = (Rank)b;
+    // fputs(r2->url, stdout);
+    printf("%lf, %lf\n", r1->rank, r2->rank);
+    // printf("Comparing %s:%lf to %s:%lf\n", r1->url, r1->rank, r2->url, r2->rank);
+    return (r1->rank > r2->rank);
 }
 
 Rank newRank(char *url, int out_degree, double rank)

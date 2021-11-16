@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     char **urls = getLinkCollection("collection.txt");
     int num_urls = (int)countTokens(urls);
 
-    // Fill graph
+    // Fill graph based on input that was read in.
     Graph g = GraphNew(num_urls);
     fillGraph(g, urls);
 

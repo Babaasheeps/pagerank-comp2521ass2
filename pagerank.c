@@ -69,10 +69,13 @@ void printDoubleArr2d(double **arr, int h, int w);
 void freeDouble2dArray(double **arr, int h);
 
 double *initArrayDoubles(int n, double init_value);
-void sortRankData(Rank *ranks, int n);
 void swapRanks(Rank *ranks, int i, int j);
 void freeRank(Rank r);
 void freeRanks(Rank *ranks, int n);
+
+void sortRankData(Rank *ranks, int n, int (*compare)(Rank, Rank));
+int compareRankUrl(Rank r1, Rank r2);
+int compareRanks(Rank r1, Rank r2);
 
 int main(int argc, char *argv[])
 {
@@ -340,7 +343,8 @@ void printFinalRanks(char **urls, int num_urls, int *out_degrees, double *ranks)
     assert(ranks != NULL);
 
     Rank *rank_data = sanitiseRankData(num_urls, urls, out_degrees, ranks);
-    sortRankData(rank_data, num_urls);
+    sortRankData(rank_data, num_urls, compareRankUrl);
+    sortRankData(rank_data, num_urls, compareRanks);
     printRankData(rank_data, num_urls);
     freeRanks(rank_data, num_urls);
 }
@@ -358,7 +362,7 @@ void freeRank(Rank r)
     free(r);
 }
 
-void sortRankData(Rank *ranks, int n)
+void sortRankData(Rank *ranks, int n, int (*compare)(Rank, Rank))
 {
     // return;
     bool is_sorted = false;
@@ -367,13 +371,24 @@ void sortRankData(Rank *ranks, int n)
         is_sorted = true;
         for (int i = 0; i < n - 1; i++)
         {
-            if (ranks[i]->rank < ranks[i + 1]->rank)
+            if ((*compare)(ranks[i], ranks[i + 1]))
             {
                 swapRanks(ranks, i, i + 1);
                 is_sorted = false;
             }
         }
     }
+}
+
+int compareRanks(Rank r1, Rank r2)
+{
+    return (r1->rank < r2->rank);
+}
+
+int compareRankUrl(Rank r1, Rank r2)
+{
+    int cmp = strcmp(r1->url, r2->url);
+    return (cmp > 0);
 }
 
 void swapRanks(Rank *ranks, int i, int j)

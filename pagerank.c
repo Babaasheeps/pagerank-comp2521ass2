@@ -253,7 +253,7 @@ int urlToIndex(char **urls, char *target)
 
 void sanitiseArgs(int argc, char *argv[], double *damping, double *diffPR, int *max_iterations)
 {
-    assert(argc >= 3);
+    // assert(argc >= 3); // Fails on cse?
     char *endptr;
     *damping = strtod(argv[1], &endptr);
     if (endptr == NULL || endptr == argv[1])

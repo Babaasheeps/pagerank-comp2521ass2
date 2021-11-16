@@ -35,8 +35,8 @@ double calculatePR(Graph g,
                    double damp,
                    Vertex i,
                    double *PR_prev,
-                   int *out_degrees,
-                   int *in_degrees);
+                   double **W_ins,
+                   double **W_outs);
 
 double calculateWeightSums(Graph g,
                            int num_urls,
@@ -108,12 +108,16 @@ double *pageRankW(Graph g, double damp, double diffPR, int max_iterations)
     printIntArr(in_degrees, num_urls);
     double **W_ins = calculateW_ins(g, in_degrees);
     double **W_outs = calculateW_outs(g, out_degrees);
+    free(out_degrees);
+    free(in_degrees);
+
+    // double constant = (1.0 - damp) / num_urls;
 
     while (iteration < max_iterations && diff >= diffPR)
     {
         for (int i = 0; i < num_urls; i++)
         {
-            PR_new[i] = calculatePR(g, num_urls, damp, i, PR_prev, out_degrees, in_degrees);
+            PR_new[i] = calculatePR(g, num_urls, damp, i, PR_prev, W_ins, W_outs);
         }
         // Swap make new -> prev and prev-> new so that it can be written to
         swapDoublePointers(&PR_new, &PR_prev);
@@ -124,8 +128,6 @@ double *pageRankW(Graph g, double damp, double diffPR, int max_iterations)
     // Return the last edited array and free the other
     freeDouble2dArray(W_ins, num_urls);
     freeDouble2dArray(W_outs, num_urls);
-    free(out_degrees);
-    free(in_degrees);
     free(PR_new);
     return PR_prev;
 }
@@ -135,41 +137,24 @@ double calculatePR(Graph g,
                    double damp,
                    Vertex i,
                    double *PR_prev,
-                   int *out_degrees,
-                   int *in_degrees)
+                   double **W_ins,
+                   double **W_outs) 
 {
     double constant = (1.0 - damp) / num_urls;
     printf("constant is: %lf\n", constant);
-    double weight_sums = calculateWeightSums(g, num_urls, i, PR_prev, out_degrees, in_degrees);
-    return constant + (damp * weight_sums);
-}
 
-double calculateWeightSums(Graph g,
-                           int num_urls,
-                           Vertex i,
-                           double *PR_prev,
-                           int *out_degrees,
-                           int *in_degrees)
-{
-    double sums = 0.0;
+    double weight_sum = 0.0;
     for (int j = 0; j < num_urls; j++)
     {
-        // Sums for all p_j that are outbound to p_i
-        // If (p_j->p_i) doesn't exist, don't add anything
-        if (!GraphEdgeExists(g, j, i))
+        // \sum_{j: edge j->i} PR_prev[j] * W_in(j, i) * W_out (j, i)
+        for (int j = 0; j < num_urls; j++)
         {
-            printf("No Edge from (%d, %d)\n", i, j);
-            continue;
+            if (!GraphEdgeExists(g, j, i))
+                continue;
+            weight_sum += PR_prev[j] * W_ins[j][i] * W_outs[j][i];
         }
-
-        double W_in = calculateWeightIn(g, i, j, in_degrees);
-        printf("Weight in for (%d, %d): is %lf\n", j, i, W_in);
-        double W_out = calculateWeightOut(g, i, j, out_degrees);
-        printf("For (%d,%d), (prev, in, out) is (%lf,%lf,%lf)\n",i, j, PR_prev[j], W_in, W_out);
-        sums += PR_prev[j] * W_in + W_out;
     }
-    printf("For (%d) the sum is %lf\n",i, sums);
-    return sums;
+    return constant + (damp * weight_sum);
 }
 
 // // ∑ p j ∈ M ( p i) P R ( p j , t) ∗ W i n ( p j , p i) ∗ W o u t ( p j , p i
@@ -198,7 +183,7 @@ double **calculateW_ins(Graph g, int *in_degrees)
             if (!GraphEdgeExists(g, j, i))
                 continue;
             // Add weight (i, j) to weight array
-            w_ins[i][j] = calculateWeightIn(g, i, j, in_degrees);
+            w_ins[j][i] = calculateWeightIn(g, i, j, in_degrees);
         }
     }
     printf("The WINS ARE:\n");
@@ -219,7 +204,7 @@ double **calculateW_outs(Graph g, int *out_degrees)
             if (!GraphEdgeExists(g, j, i))
                 continue;
             // Add weight (i, j) to weight array
-            w_outs[i][j] = calculateWeightOut(g, i, j, out_degrees);
+            w_outs[j][i] = calculateWeightOut(g, i, j, out_degrees);
         }
     }
     printf("THE WOUTS ARE:\n");
@@ -230,8 +215,9 @@ double **calculateW_outs(Graph g, int *out_degrees)
 double calculateWeightOut(Graph g, Vertex i, Vertex j, int *out_degrees)
 {
     int num_urls = GraphNumVertices(g);
-    int O_i = out_degrees[i];
+    double O_i = (out_degrees[i] == 0) ? 0.5 : out_degrees[i];
     double denom_sum = 0;
+    printf("OI is %lf when (i,j) is (%d,%d)\n", O_i, i, j);
     for (int k = 0; k < num_urls; k++)
     {
         // If edge from j->k, then add outsum of k. If outsum is 0, then add 0.5
@@ -245,15 +231,17 @@ double calculateWeightIn(Graph g, Vertex i, Vertex j, int *in_degrees)
 {
     int num_urls = GraphNumVertices(g);
     int O_i = in_degrees[i];
+    printf("OI is %d when (i,j) is (%d,%d)\n", O_i, i, j);
     double denom_sum = 0;
     for (int k = 0; k < num_urls; k++)
     {
-        // If edge from j->k, then add outsum of k. If outsum is 0, then add 0.5
+        // If edge from j->k, then add in_deg of k. If in_deg is 0, then add 0.5
         if (GraphEdgeExists(g, j, k))
             denom_sum += (in_degrees[k] == 0.0) ? 0.5 : in_degrees[k];
     }
     return (((double) O_i / denom_sum));
 }
+
 void printDoubleArr(double *arr, int n)
 {
     printf("Array: [");

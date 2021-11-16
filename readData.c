@@ -16,7 +16,6 @@ char **getLinkCollection(char *filename)
     char *file_str = fileToString(filename, file_length);
     char **urls = tokenize(file_str);
     free(file_str);
-    // printTokens(urls, true);
     return urls;
 }
 
@@ -35,7 +34,6 @@ char *fileToString(char *filename, long file_len)
         // printf("%d\t%c\n", i, c);
         s[i] = (isalnum(c)) ? c : ' ';
     }
-    // printf("%s\n", s);
     fclose(f);
     return s;
 }
@@ -53,8 +51,6 @@ char **outgoingLinks(char *file)
 
     // Open File and Get all the token from it
     char **outgoing_urls = doReadOutgoingLinks(filename);
-    // printf("Found\n");
-    // printTokens(outgoing_urls, true);
     return outgoing_urls;
 }
 

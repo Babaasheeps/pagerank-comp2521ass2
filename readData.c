@@ -80,8 +80,8 @@ char **doReadOutgoingLinks(char *filename)
     }
     char **outgoing_urls = tokenize(urlcontents);
     // printf("Final URL CONTENTS:%s\n", urlcontents);
-    free(urlcontents);
-    free(temp);
+    // free(urlcontents);
+    // free(temp);
     return outgoing_urls;
 }
 

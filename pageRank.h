@@ -19,8 +19,8 @@ typedef struct rank_data
     char *url;
     int out_degree;
     double rank;
-} rank_data;
-typedef rank_data *Rank;
+} page_rank_data;
+typedef page_rank_data *Rank;
 
 /**
  * @brief Expects three arguments in argv. Checks type and range. Exits if

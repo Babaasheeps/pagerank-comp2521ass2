@@ -5,84 +5,91 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "readData.h"
+#include "data.h"
 
+
+// int main(void)
+// {
+//     getLinkCollection("collection.txt");
+//     return 0;
+// }
 
 char **getLinkCollection(char *filename)
 {
-    // Get length of the file
+    // Get length of file to know how much space to allocate in buffer
     long file_length = getFileLength(filename);
-    // Convert filename to a string so that it can be tokenized
-    char *file_str = fileToString(filename, file_length);
-    char **urls = tokenize(file_str);
-    free(file_str);
+    char *buffer = bufferFile(filename, file_length);
+    char **urls = tokenize (buffer);
+    free(buffer);
     return urls;
 }
 
-char *fileToString(char *filename, long file_len)
+char *bufferFile(char *filename, long file_len)
 {
-    // Allocate memory to store entire file in string
-    char *s = createString(file_len + 2);
+    char *buffer = malloc(sizeof(char) * (file_len + 1));
 
+    // Read entire file into the buffer created
     FILE *f = fopen(filename, "r");
     int i;
     for (i = 0; i < file_len; i++)
     {
-        // Read char and turn all not alphanumeric to whitespace
+        // Read char by char. Remove any non-alphanumeric chars.
+        // Replace as whitespace
         int c = fgetc(f);
-        s[i] = (isalnum(c)) ? c : ' ';
+        buffer[i] = (isalnum(c)) ? c : ' ';
     }
+    buffer[i] = '\0';
     fclose(f);
-    return s;
+    return buffer;
 }
 
-
-char **outgoingLinks(char *file)
+char **getOutgoingLinks(char *file)
 {
-    // Create filename that is <file>.txt
-    char *filename = createString(MAX_URL_LEN + 2);
+    // Add ".txt" to file name. Create space for extension and null 
+    char *filename = createString(MAX_URL_LEN + 6);
     strcpy(filename, file);
     char *file_ext = ".txt";
     strcat(filename, file_ext);
 
-    // Open File and Get all the token from it
+    // Open the file and, tokenise all outgoing urls
     char **outgoing_urls = doReadOutgoingLinks(filename);
+    free(filename);
     return outgoing_urls;
 }
 
 char **doReadOutgoingLinks(char *filename)
 {
-    long file_len = getFileLength(filename);
-    char *urlcontents = createString(file_len + 2);
-    // char *urlcontents = malloc(sizeof(*urlcontents) * (file_len + 1));
-    // urlcontents[0] = '\0';
+    // Create space to be able to buffer the file 
+    long file_length = getFileLength(filename);
+    char *file_buffer = createString(file_length + 1);
+
     FILE *f = fopen(filename, "r");
-    assert (f != NULL);
-    // char *closing_line = "#end Section-1";
-    char *opening_line = "#start Section-1";
+    assert(f != NULL);
+    
+    // Can ignore opening line.
+    char *opening_line = createString(file_length + 1);
+    opening_line = fgets(opening_line, file_length, f);
+    free(opening_line);
 
-    // Skip the first line, which is an opening Label
-    char *temp = createString(strlen(opening_line) + 1);
-    // char *temp = malloc(sizeof(*temp) * (strlen(opening_line) + 1));
-    fgets(temp, file_len, f); // First line is "# Section 1" - can skip
-    free(temp);
-
-    // Scan input till closing line reached
-    // printf("FILE: %s\n", filename);
-    temp = createString(file_len + 1);
-    while (true)
+    // Read input till the "#" to signify end of section 1 is reached.
+    for (int i = 0; true; i++)
     {
-        temp = fgets(temp, file_len, f);
-        // '#' indicated end of section-1.
-        if (temp[0] == '#')
+        int c = fgetc(f);
+        if (c == EOF || c == '#')
+        {
+            file_buffer[i] = '\0';
             break;
-        strcat(urlcontents, temp);
-        // free(temp);
+        }
+        file_buffer[i] = (isalnum(c)) ? c : ' ';
     }
-    char **outgoing_urls = tokenize(urlcontents);
-    free(urlcontents);
-    return outgoing_urls;
+    // Turn the buffer holding section 1 into tokens w/ url names
+    char **urls = tokenize(file_buffer);
+    // Free buffer and close file 
+    fclose(f);
+    free(file_buffer);
+    return urls;
 }
+
 
 long getFileLength(char *filename)
 {
@@ -138,8 +145,6 @@ void freeTokens (char **tokens)
         free (tokens[i]);
     free (tokens);
 }
-
-
 
 void printTokens(char **tokens, bool is_comma_seperated)
 {

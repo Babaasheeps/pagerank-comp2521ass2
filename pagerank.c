@@ -11,7 +11,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "readData.h"
+// #include "readData.h"
+#include "data.h"
 #include "Graph.h"
 #include "pageRank.h"
 
@@ -220,11 +221,12 @@ void fillGraph(Graph g, char **urls)
 {
     for (int i = 0; urls[i] != NULL; i++)
     {
-        char **outgoing = outgoingLinks(urls[i]);
+        char **outgoing = getOutgoingLinks(urls[i]);
         fillOutgoingLinks(g, urls, outgoing, i);
         freeTokens(outgoing);
     }
 }
+
 
 void fillOutgoingLinks(Graph g, char **all_urls, char **outgoing_urls, int src_index)
 {

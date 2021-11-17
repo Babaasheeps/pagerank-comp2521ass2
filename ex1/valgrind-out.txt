@@ -1,0 +1,188 @@
+==32683== Memcheck, a memory error detector
+==32683== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==32683== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==32683== Command: ./pagerank 0.85 0.0001 1000
+==32683== Parent PID: 16180
+==32683== 
+==32683== Invalid write of size 1
+==32683==    at 0x4838AB0: strcpy (vg_replace_strmem.c:510)
+==32683==    by 0x10A6D8: outgoingLinks (readData.c:44)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683==  Address 0x4bc6fe2 is 0 bytes after a block of size 2 alloc'd
+==32683==    at 0x48357BF: malloc (vg_replace_malloc.c:299)
+==32683==    by 0x10AB6C: createString (readData.c:171)
+==32683==    by 0x10A6C1: outgoingLinks (readData.c:43)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683== 
+==32683== Invalid write of size 1
+==32683==    at 0x4838ABD: strcpy (vg_replace_strmem.c:510)
+==32683==    by 0x10A6D8: outgoingLinks (readData.c:44)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683==  Address 0x4bc6fe5 is 3 bytes after a block of size 2 alloc'd
+==32683==    at 0x48357BF: malloc (vg_replace_malloc.c:299)
+==32683==    by 0x10AB6C: createString (readData.c:171)
+==32683==    by 0x10A6C1: outgoingLinks (readData.c:43)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683== 
+==32683== Invalid read of size 1
+==32683==    at 0x4838654: strcat (vg_replace_strmem.c:307)
+==32683==    by 0x10A6F6: outgoingLinks (readData.c:46)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683==  Address 0x4bc6fe2 is 0 bytes after a block of size 2 alloc'd
+==32683==    at 0x48357BF: malloc (vg_replace_malloc.c:299)
+==32683==    by 0x10AB6C: createString (readData.c:171)
+==32683==    by 0x10A6C1: outgoingLinks (readData.c:43)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683== 
+==32683== Invalid write of size 1
+==32683==    at 0x4838678: strcat (vg_replace_strmem.c:307)
+==32683==    by 0x10A6F6: outgoingLinks (readData.c:46)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683==  Address 0x4bc6fe5 is 3 bytes after a block of size 2 alloc'd
+==32683==    at 0x48357BF: malloc (vg_replace_malloc.c:299)
+==32683==    by 0x10AB6C: createString (readData.c:171)
+==32683==    by 0x10A6C1: outgoingLinks (readData.c:43)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683== 
+==32683== Invalid write of size 1
+==32683==    at 0x4838688: strcat (vg_replace_strmem.c:307)
+==32683==    by 0x10A6F6: outgoingLinks (readData.c:46)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683==  Address 0x4bc6fe9 is 7 bytes after a block of size 2 alloc'd
+==32683==    at 0x48357BF: malloc (vg_replace_malloc.c:299)
+==32683==    by 0x10AB6C: createString (readData.c:171)
+==32683==    by 0x10A6C1: outgoingLinks (readData.c:43)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683== 
+==32683== Syscall param openat(filename) points to unaddressable byte(s)
+==32683==    at 0x4AE61AE: open (open64.c:48)
+==32683==    by 0x4A77E51: _IO_file_open (fileops.c:189)
+==32683==    by 0x4A77FFC: _IO_file_fopen@@GLIBC_2.2.5 (fileops.c:281)
+==32683==    by 0x4A6C158: __fopen_internal (iofopen.c:75)
+==32683==    by 0x10A834: getFileLength (readData.c:85)
+==32683==    by 0x10A724: doReadOutgoingLinks (readData.c:55)
+==32683==    by 0x10A702: outgoingLinks (readData.c:49)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683==  Address 0x4bc6fe2 is 0 bytes after a block of size 2 alloc'd
+==32683==    at 0x48357BF: malloc (vg_replace_malloc.c:299)
+==32683==    by 0x10AB6C: createString (readData.c:171)
+==32683==    by 0x10A6C1: outgoingLinks (readData.c:43)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683== 
+==32683== Invalid write of size 1
+==32683==    at 0x4A6C062: fgets (iofgets.c:60)
+==32683==    by 0x10A7B6: doReadOutgoingLinks (readData.c:66)
+==32683==    by 0x10A702: outgoingLinks (readData.c:49)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683==  Address 0x4bc8701 is 0 bytes after a block of size 17 alloc'd
+==32683==    at 0x48357BF: malloc (vg_replace_malloc.c:299)
+==32683==    by 0x10A79A: doReadOutgoingLinks (readData.c:65)
+==32683==    by 0x10A702: outgoingLinks (readData.c:49)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683== 
+==32683== Invalid write of size 2
+==32683==    at 0x483C403: memmove (vg_replace_strmem.c:1258)
+==32683==    by 0x4A6CFC3: _IO_getline_info (iogetline.c:96)
+==32683==    by 0x4A6BFEA: fgets (iofgets.c:53)
+==32683==    by 0x10A7CE: doReadOutgoingLinks (readData.c:72)
+==32683==    by 0x10A702: outgoingLinks (readData.c:49)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683==  Address 0x4bc8700 is 16 bytes inside a block of size 17 alloc'd
+==32683==    at 0x48357BF: malloc (vg_replace_malloc.c:299)
+==32683==    by 0x10A79A: doReadOutgoingLinks (readData.c:65)
+==32683==    by 0x10A702: outgoingLinks (readData.c:49)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683== 
+==32683== Invalid write of size 1
+==32683==    at 0x483C43B: memmove (vg_replace_strmem.c:1258)
+==32683==    by 0x4A6CFC3: _IO_getline_info (iogetline.c:96)
+==32683==    by 0x4A6BFEA: fgets (iofgets.c:53)
+==32683==    by 0x10A7CE: doReadOutgoingLinks (readData.c:72)
+==32683==    by 0x10A702: outgoingLinks (readData.c:49)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683==  Address 0x4bc8706 is 5 bytes after a block of size 17 alloc'd
+==32683==    at 0x48357BF: malloc (vg_replace_malloc.c:299)
+==32683==    by 0x10A79A: doReadOutgoingLinks (readData.c:65)
+==32683==    by 0x10A702: outgoingLinks (readData.c:49)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683== 
+==32683== Invalid write of size 1
+==32683==    at 0x4A6C062: fgets (iofgets.c:60)
+==32683==    by 0x10A7CE: doReadOutgoingLinks (readData.c:72)
+==32683==    by 0x10A702: outgoingLinks (readData.c:49)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683==  Address 0x4bc8707 is 6 bytes after a block of size 17 alloc'd
+==32683==    at 0x48357BF: malloc (vg_replace_malloc.c:299)
+==32683==    by 0x10A79A: doReadOutgoingLinks (readData.c:65)
+==32683==    by 0x10A702: outgoingLinks (readData.c:49)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683== 
+==32683== Invalid read of size 1
+==32683==    at 0x483867B: strcat (vg_replace_strmem.c:307)
+==32683==    by 0x10A7F0: doReadOutgoingLinks (readData.c:76)
+==32683==    by 0x10A702: outgoingLinks (readData.c:49)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683==  Address 0x4bc8701 is 0 bytes after a block of size 17 alloc'd
+==32683==    at 0x48357BF: malloc (vg_replace_malloc.c:299)
+==32683==    by 0x10A79A: doReadOutgoingLinks (readData.c:65)
+==32683==    by 0x10A702: outgoingLinks (readData.c:49)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683== 
+==32683== 
+==32683== HEAP SUMMARY:
+==32683==     in use at exit: 3,997 bytes in 21 blocks
+==32683==   total heap usage: 154 allocs, 133 frees, 79,764 bytes allocated
+==32683== 
+==32683== 14 bytes in 7 blocks are definitely lost in loss record 1 of 3
+==32683==    at 0x48357BF: malloc (vg_replace_malloc.c:299)
+==32683==    by 0x10AB6C: createString (readData.c:171)
+==32683==    by 0x10A6C1: outgoingLinks (readData.c:43)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683== 
+==32683== 119 bytes in 7 blocks are definitely lost in loss record 2 of 3
+==32683==    at 0x48357BF: malloc (vg_replace_malloc.c:299)
+==32683==    by 0x10A79A: doReadOutgoingLinks (readData.c:65)
+==32683==    by 0x10A702: outgoingLinks (readData.c:49)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683== 
+==32683== 3,864 bytes in 7 blocks are still reachable in loss record 3 of 3
+==32683==    at 0x48357BF: malloc (vg_replace_malloc.c:299)
+==32683==    by 0x4A6C0FA: __fopen_internal (iofopen.c:65)
+==32683==    by 0x10A74D: doReadOutgoingLinks (readData.c:59)
+==32683==    by 0x10A702: outgoingLinks (readData.c:49)
+==32683==    by 0x109C08: fillGraph (pagerank.c:222)
+==32683==    by 0x109340: main (pagerank.c:32)
+==32683== 
+==32683== LEAK SUMMARY:
+==32683==    definitely lost: 133 bytes in 14 blocks
+==32683==    indirectly lost: 0 bytes in 0 blocks
+==32683==      possibly lost: 0 bytes in 0 blocks
+==32683==    still reachable: 3,864 bytes in 7 blocks
+==32683==         suppressed: 0 bytes in 0 blocks
+==32683== 
+==32683== For counts of detected and suppressed errors, rerun with: -v
+==32683== ERROR SUMMARY: 205 errors from 13 contexts (suppressed: 0 from 0)

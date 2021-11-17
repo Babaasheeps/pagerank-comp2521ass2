@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     sanitiseArgs(argc, argv, &damping, &diffPR, &max_iterations);
 
     // Read pages
-    char **urls = getLinkCollection("collection.txt");
+    char **urls = getLinkCollection("collection.txt"); // Freed by printer
     int num_urls = (int)countTokens(urls);
 
     // Fill graph based on input that was read in.
@@ -253,7 +253,7 @@ int urlToIndex(char **urls, char *target)
 
 void sanitiseArgs(int argc, char *argv[], double *damping, double *diffPR, int *max_iterations)
 {
-    // assert(argc >= 3); // Fails on cse?
+    assert(argc >= 3); // Fails on cse?
     char *endptr;
     *damping = strtod(argv[1], &endptr);
     if (endptr == NULL || endptr == argv[1])
@@ -339,10 +339,13 @@ void swapRanks(Rank *ranks, int i, int j)
 void printRankData(Rank *ranks, int n)
 {
     for (int i = 0; i < n; i++)
+    {
+        printf("Address:\t %p:%p", ranks[i], ranks[i]->url);
         printf("%s, %d, %.7lf\n",
                ranks[i]->url,
                ranks[i]->out_degree,
                ranks[i]->rank);
+    }
 }
 
 Rank *sanitiseRankData(int num_urls, char **urls, int *out_degrees, double *ranks)

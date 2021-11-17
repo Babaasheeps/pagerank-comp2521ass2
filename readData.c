@@ -80,8 +80,8 @@ char **doReadOutgoingLinks(char *filename)
     }
     char **outgoing_urls = tokenize(urlcontents);
     // printf("Final URL CONTENTS:%s\n", urlcontents);
-    // free(urlcontents);
-    // free(temp);
+    free(urlcontents);
+    free(temp);
     return outgoing_urls;
 }
 
@@ -135,10 +135,9 @@ char **tokenize (char *str)
 
 void freeTokens (char **tokens)
 {
-        for (int i = 0; tokens != NULL && tokens[i] != NULL; i++)
-                free (tokens[i]);
-
-        free (tokens);
+    for (int i = 0; tokens != NULL && tokens[i] != NULL; i++)
+        free (tokens[i]);
+    free (tokens);
 }
 
 

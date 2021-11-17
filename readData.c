@@ -22,8 +22,7 @@ char **getLinkCollection(char *filename)
 char *fileToString(char *filename, long file_len)
 {
     // Allocate memory to store entire file in string
-    char *s = createString(file_len + 1);
-    assert (s != NULL);
+    char *s = createString(file_len + 2);
 
     FILE *f = fopen(filename, "r");
     int i;
@@ -41,7 +40,7 @@ char *fileToString(char *filename, long file_len)
 char **outgoingLinks(char *file)
 {
     // Create filename that is <file>.txt
-    char *filename = createString(MAX_URL_LEN + 1);
+    char *filename = createString(MAX_URL_LEN + 2);
     strcpy(filename, file);
     char *file_ext = ".txt";
     strcat(filename, file_ext);
@@ -54,7 +53,7 @@ char **outgoingLinks(char *file)
 char **doReadOutgoingLinks(char *filename)
 {
     long file_len = getFileLength(filename);
-    char *urlcontents = createString(file_len + 1);
+    char *urlcontents = createString(file_len + 2);
     // char *urlcontents = malloc(sizeof(*urlcontents) * (file_len + 1));
     // urlcontents[0] = '\0';
     FILE *f = fopen(filename, "r");

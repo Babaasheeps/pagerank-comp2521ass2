@@ -375,6 +375,8 @@ Rank newRank(char *url, int out_degree, double rank)
 }
 char *copyString(char *str)
 {
+    if(str == NULL)
+        return NULL;
     int new_len = strlen(str) + 1;
     char *new = malloc(sizeof(char) * (new_len));
     assert(new != NULL);

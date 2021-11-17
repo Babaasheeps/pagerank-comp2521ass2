@@ -69,6 +69,7 @@ char **doReadOutgoingLinks(char *filename)
     fgets(temp, file_len, f); // First line is "# Section 1" - can skip
 
     // Scan input till closing line reached
+    printf("FILE: %s\n", filename);
     while (true)
     {
         temp = fgets(temp, file_len, f);

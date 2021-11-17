@@ -76,8 +76,7 @@ char **doReadOutgoingLinks(char *filename)
         if (temp[0] == '#')
             break;
         strcat(urlcontents, temp);
-        free(temp);
-        // printf("Contents is now:%s\n", urlcontents);
+        printf("Contents is now:%s\n", urlcontents);
     }
     char **outgoing_urls = tokenize(urlcontents);
     // printf("Final URL CONTENTS:%s\n", urlcontents);

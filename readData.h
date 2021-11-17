@@ -90,5 +90,22 @@ char **outgoingLinks(char *file);
  */
 char **doReadOutgoingLinks(char *filename);
 
+/**
+ * @brief Create a string, initialised all as '\0'. May seem like benign
+ * abstraction but, rationale is:
+ *         - If you just malloc an empty string and don't initialise
+ *         its values to anything, then `strcpy` and `strcat` will have 
+ *         mixed presets behaviours depending on OS / compiler.
+ *          - Clang suppresses the issue and is smart enough to work around.
+ *          - gcc will have mixed behaviours. If run through valgrind,
+ *          valgrind can supress err and run file till end but otherwise,
+ *          esp if compiled w/ gdb flag, there may be a SIGABRT that is
+ *          triggered.
+ * TLDR: C string library functions are (ostensibly) poorly standardised
+ * 
+ * @param n - size of string to create
+ * @return char* 
+ */
+char *createString(int n);
 
 #endif // !READ_DATA

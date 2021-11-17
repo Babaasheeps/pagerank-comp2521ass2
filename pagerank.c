@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
     int *out_degrees = outDegreeArray(g);
 
     // Sort Ranks and output
+    printf("PRINTING RESUTL\n:---\n");
     printFinalRanks(urls, num_urls, out_degrees, ranks);
 
     // Free Memory
@@ -338,11 +339,12 @@ void swapRanks(Rank *ranks, int i, int j)
     ranks[j] = temp;
 }
 
+
 void printRankData(Rank *ranks, int n)
 {
     for (int i = 0; i < n; i++)
     {
-        printf("Address:\t %p:%p", ranks[i], ranks[i]->url);
+        printf("Address:\t %p:%p\n", ranks[i], ranks[i]->url);
         printf("%s, %d, %.7lf\n",
                ranks[i]->url,
                ranks[i]->out_degree,

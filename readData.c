@@ -22,7 +22,7 @@ char **getLinkCollection(char *filename)
 char *fileToString(char *filename, long file_len)
 {
     // Allocate memory to store entire file in string
-    char *s = malloc(sizeof(*s) * (file_len + 1));
+    char *s = createString(file_len + 1);
     assert (s != NULL);
 
     FILE *f = fopen(filename, "r");
@@ -42,9 +42,7 @@ char *fileToString(char *filename, long file_len)
 char **outgoingLinks(char *file)
 {
     // Create filename that is <file>.txt
-    char *filename = malloc(sizeof(*filename) * (MAX_URL_LEN + 1));
-    assert (filename != NULL);
-    // filename[0] = '\0';
+    char *filename = createString(MAX_URL_LEN + 1);
     strcpy(filename, file);
     char *file_ext = ".txt";
     strcat(filename, file_ext);
@@ -57,9 +55,9 @@ char **outgoingLinks(char *file)
 char **doReadOutgoingLinks(char *filename)
 {
     long file_len = getFileLength(filename);
-    char *urlcontents = malloc(sizeof(*urlcontents) * (file_len + 1));
-    urlcontents[0] = '\0';
-    assert(urlcontents != NULL);
+    char *urlcontents = createString(file_len + 1);
+    // char *urlcontents = malloc(sizeof(*urlcontents) * (file_len + 1));
+    // urlcontents[0] = '\0';
     FILE *f = fopen(filename, "r");
     assert (f != NULL);
     // char *closing_line = "#end Section-1";
@@ -84,7 +82,7 @@ char **doReadOutgoingLinks(char *filename)
     char **outgoing_urls = tokenize(urlcontents);
     // printf("Final URL CONTENTS:%s\n", urlcontents);
     free(urlcontents);
-    // free(temp);
+    // free(temp); // TODO: Free
     return outgoing_urls;
 }
 
@@ -172,4 +170,13 @@ size_t countTokens(char **tokens)
     for (i = 0; tokens[i] != NULL; i++)
         ;
     return i;
+}
+
+char *createString(int n)
+{
+    char *s = malloc(sizeof(*s) * n);
+    assert(s != NULL);
+    for (int i = 0; i < n; i++)
+        s[i] = '\0';
+    return s;
 }

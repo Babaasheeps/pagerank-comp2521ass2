@@ -58,7 +58,8 @@ char **doReadOutgoingLinks(char *filename)
 {
     long file_len = getFileLength(filename);
     char *urlcontents = malloc(sizeof(*urlcontents) * (file_len + 1));
-    assert (urlcontents != NULL);
+    urlcontents[0] = '\0';
+    assert(urlcontents != NULL);
     FILE *f = fopen(filename, "r");
     assert (f != NULL);
     // char *closing_line = "#end Section-1";

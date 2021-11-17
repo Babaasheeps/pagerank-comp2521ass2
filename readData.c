@@ -66,7 +66,7 @@ char **doReadOutgoingLinks(char *filename)
 
     // Skip the first line, which is an opening Label
     char *temp = malloc(sizeof(*temp) * (strlen(opening_line) + 1));
-    fgets(temp, file_len, f);
+    fgets(temp, file_len, f); // First line is "# Section 1" - can skip
 
     // Scan input till closing line reached
     while (true)

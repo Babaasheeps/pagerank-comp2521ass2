@@ -1,7 +1,7 @@
 // COMP2521 Assignment 2
 
-// Written by:
-// Date:
+// Written by: Hussain Nawaz
+// Date: November 2021
 
 #include <assert.h>
 #include <ctype.h>
@@ -36,7 +36,6 @@ int main(int argc, char *argv[])
     int *out_degrees = outDegreeArray(g);
 
     // Sort Ranks and output
-    printf("PRINTING RESUTL\n:---\n");
     printFinalRanks(urls, num_urls, out_degrees, ranks);
 
     // Free Memory
@@ -232,12 +231,10 @@ void fillOutgoingLinks(Graph g, char **all_urls, char **outgoing_urls, int src_i
     for (int i = 0; outgoing_urls[i] != NULL; i++)
     {
         int dest_index = urlToIndex(all_urls, outgoing_urls[i]);
-        printf("dest index is %d\n", dest_index);
         // Must ignore self-loops
         if (dest_index == src_index) // Exclude index < 1?
             continue;
         Edge e = createEdge(src_index, dest_index, 1);
-        printf("Url is %s. Edge is (%d, %d).\n", outgoing_urls[i], e.v, e.w);
         GraphInsertEdge(g, e);
     }
 }
@@ -305,7 +302,6 @@ void freeRank(Rank r)
 
 void sortRankData(Rank *ranks, int n, int (*compare)(Rank, Rank))
 {
-    // return;
     bool is_sorted = false;
     while (!is_sorted)
     {
@@ -344,7 +340,6 @@ void printRankData(Rank *ranks, int n)
 {
     for (int i = 0; i < n; i++)
     {
-        printf("Address:\t %p:%p\n", ranks[i], ranks[i]->url);
         printf("%s, %d, %.7lf\n",
                ranks[i]->url,
                ranks[i]->out_degree,

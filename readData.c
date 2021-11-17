@@ -31,7 +31,6 @@ char *fileToString(char *filename, long file_len)
     {
         // Read char and turn all not alphanumeric to whitespace
         int c = fgetc(f);
-        // printf("%d\t%c\n", i, c);
         s[i] = (isalnum(c)) ? c : ' ';
     }
     fclose(f);
@@ -68,21 +67,17 @@ char **doReadOutgoingLinks(char *filename)
     fgets(temp, file_len, f); // First line is "# Section 1" - can skip
 
     // Scan input till closing line reached
-    printf("FILE: %s\n", filename);
+    // printf("FILE: %s\n", filename);
     while (true)
     {
         temp = fgets(temp, file_len, f);
-        // printf("temp is:%s\n", temp);
+        // '#' indicated end of section-1.
         if (temp[0] == '#')
             break;
         strcat(urlcontents, temp);
-        printf("Contents is now:%s\n", urlcontents);
     }
-    printf("For file %s, final contents is %s\n", filename, urlcontents);
     char **outgoing_urls = tokenize(urlcontents);
-    // printf("Final URL CONTENTS:%s\n", urlcontents);
     free(urlcontents);
-    // free(temp); // TODO: Free
     return outgoing_urls;
 }
 

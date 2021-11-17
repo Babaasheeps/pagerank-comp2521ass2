@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
     double diffPR;
     int max_iterations;
     sanitiseArgs(argc, argv, &damping, &diffPR, &max_iterations);
+    
 
     // Read pages
     char **urls = getLinkCollection("collection.txt"); // Freed by printer

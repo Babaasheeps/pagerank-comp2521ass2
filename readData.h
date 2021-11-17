@@ -1,7 +1,7 @@
 #ifndef READ_DATA
 #define READ_DATA
 
-#define MAX_URL_LEN
+#define MAX_URL_LEN 100
 
 /**
  * @brief Read a collectiosn file and return tokens of all the urls
@@ -101,7 +101,7 @@ char **doReadOutgoingLinks(char *filename);
  *          valgrind can supress err and run file till end but otherwise,
  *          esp if compiled w/ gdb flag, there may be a SIGABRT that is
  *          triggered.
- * TLDR: C string library functions are (ostensibly) poorly standardised
+ * TLDR: C string library functions are (ostensibly) poorly standardise
  * 
  * @param n - size of string to create
  * @return char* 

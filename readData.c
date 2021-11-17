@@ -168,7 +168,7 @@ size_t countTokens(char **tokens)
 
 char *createString(int n)
 {
-    char *s = malloc(sizeof(*s) * n);
+    char *s = malloc(sizeof(char) * n);
     assert(s != NULL);
     for (int i = 0; i < n; i++)
         s[i] = '\0';

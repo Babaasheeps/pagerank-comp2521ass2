@@ -79,6 +79,7 @@ char **doReadOutgoingLinks(char *filename)
         strcat(urlcontents, temp);
         printf("Contents is now:%s\n", urlcontents);
     }
+    printf("For file %s, final contents is %s\n", filename, urlcontents);
     char **outgoing_urls = tokenize(urlcontents);
     // printf("Final URL CONTENTS:%s\n", urlcontents);
     free(urlcontents);

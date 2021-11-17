@@ -235,6 +235,7 @@ void fillOutgoingLinks(Graph g, char **all_urls, char **outgoing_urls, int src_i
         if (dest_index == src_index)
             continue;
         Edge e = createEdge(src_index, dest_index, 1);
+        printf("Url is %s. Edge is (%d, %d).\n", outgoing_urls[i], e.v, e.w);
         GraphInsertEdge(g, e);
     }
 }

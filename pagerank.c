@@ -231,8 +231,9 @@ void fillOutgoingLinks(Graph g, char **all_urls, char **outgoing_urls, int src_i
     for (int i = 0; outgoing_urls[i] != NULL; i++)
     {
         int dest_index = urlToIndex(all_urls, outgoing_urls[i]);
+        printf("dest index is %d\n", dest_index);
         // Must ignore self-loops
-        if (dest_index == src_index)
+        if (dest_index == src_index || dest_index == -1)
             continue;
         Edge e = createEdge(src_index, dest_index, 1);
         printf("Url is %s. Edge is (%d, %d).\n", outgoing_urls[i], e.v, e.w);

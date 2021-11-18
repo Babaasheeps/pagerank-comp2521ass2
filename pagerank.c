@@ -14,7 +14,7 @@
 // #include "readData.h"
 #include "data.h"
 #include "Graph.h"
-#include "pageRank.h"
+#include "pagerank.h"
 
 int main(int argc, char *argv[])
 {

@@ -8,12 +8,6 @@
 #include "data.h"
 
 
-// int main(void)
-// {
-//     getLinkCollection("collection.txt");
-//     return 0;
-// }
-
 char **getLinkCollection(char *filename)
 {
     // Get length of file to know how much space to allocate in buffer

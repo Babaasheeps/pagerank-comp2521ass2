@@ -18,11 +18,8 @@ char **fileToLineTokens(char *filename)
     long file_len = getFileLength(filename);
 
     char *file_buffer = bufferFile(filename, file_len, false);
-    printf("Buffer:\n%s\n", file_buffer);
     // Tokenise file on newline. equiv to file_buffer.split('\n') in python
     char **line_tokens = tokenize(file_buffer, "\n");
-    printf("After Being tokened:\n");
-    printTokens(line_tokens, true);
 
     // Free the buffer
     free(file_buffer);
@@ -60,6 +57,21 @@ long getFileLength(char *filename)
 }
 
 
+
+void freeTokens (char **tokens)
+{
+    for (int i = 0; tokens != NULL && tokens[i] != NULL; i++)
+        free (tokens[i]);
+    free (tokens);
+}
+
+void freeTokensArray(char ***tokens)
+{
+    for (int i = 0; tokens[i] != NULL; i++)
+        freeTokens(tokens[i]);
+    free(tokens);
+}
+
 char **tokenize (char *str, char *sep)
 {
     size_t n_tokens = 0;
@@ -83,7 +95,7 @@ char **tokenize (char *str, char *sep)
         assert(tok != NULL);
         str += len;
 
-        // Add this token.  (Should really use reallocarray(3) here.)
+        // Add to tokens
         tokens = realloc(tokens, ++n_tokens * sizeof *tokens);
         tokens[n_tokens - 1] = tok;
     }
@@ -116,18 +128,14 @@ char *bufferFile(char *filename, long file_len, bool alnum_only)
 
 char ***reTokenize(char **tokens, char *sep)
 {
-    printf("\n-----\n---\nRETOKKING::\n");
     long lines = (long)countTokens(tokens);
     char ***new_tok = malloc(sizeof(char **) * (lines + 1));
 
     int i;
     // Retokenize the each line
     for(i = 0; i < lines; i++)
-    {
-        printf("Tring to retokenize at index\t(%d)\n", i);
         new_tok[i] = tokenize(tokens[i], sep);
-        printTokens(new_tok[i], true);
-    }
+        
     new_tok[i] = NULL;
     return new_tok;
 }
@@ -141,15 +149,16 @@ void printTokens(char **tokens, bool is_comma_seperated)
     for (int i = 0; tokens[i] != NULL; i++)
     {
         if (is_comma_seperated)
-            printf("%s , ", tokens[i]);
+            printf("'%s' , ", tokens[i]);
         else
-            printf("\t%s\n", tokens[i]);
+            printf("\t'%s'\n", tokens[i]);
     }
     if (is_comma_seperated)
         printf(" NULL ]\n");
     else
         printf("\t NULL\n]\n");
 }
+
 
 size_t countTokens(char **tokens)
 {
@@ -160,3 +169,5 @@ size_t countTokens(char **tokens)
         ;
     return i;
 }
+
+

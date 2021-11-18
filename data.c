@@ -76,7 +76,7 @@ char **doReadOutgoingLinks(char *filename)
         }
         file_buffer[i] = (isalnum(c)) ? c : ' ';
     }
-    // Turn the buffer holding section 1 into tokens w/ url names
+    // Turn the buffer holding `section 1` into tokens w/ url names
     char **urls = tokenize(file_buffer);
     // Free buffer and close file 
     fclose(f);
@@ -139,6 +139,7 @@ void freeTokens (char **tokens)
         free (tokens[i]);
     free (tokens);
 }
+
 
 void printTokens(char **tokens, bool is_comma_seperated)
 {

@@ -1,6 +1,6 @@
 // COMP2521 Assignment 2
 
-// Written by: Hussain Nawaz
+// Written by: Hussain Nawaz (z5361515)
 // Date: November 2021
 
 #include <assert.h>
@@ -15,6 +15,7 @@
 #include "data.h"
 #include "Graph.h"
 #include "pagerank.h"
+#include "tokens.h"
 
 int main(int argc, char *argv[])
 {

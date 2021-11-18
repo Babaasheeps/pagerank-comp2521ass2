@@ -9,7 +9,6 @@
 #define GRAPH_H
 
 #include <stdbool.h>
-// #include "PQ.h"
 
 typedef struct graph *Graph;
 
@@ -78,14 +77,41 @@ void   GraphShow(Graph g);
  */
 Edge createEdge(Vertex src, Vertex dst, double weight);
 
+// FUNCTIONS ABOVE THIS POINT ARE STARTER CODE FROM 2521 LABS
+// ##################################################################### //
+// ########################## SPLITTING POINT ########################## //
+// ##################################################################### //
+// FUNCTION BELOW THESE POINT ARE CUSTOM
 
+
+/** 
+ * Prints the adjacency matrix of a graph
+ */
 void printGraph(Graph g);
+
+/**
+ * Returns true if an edge between the start and dest node exists.
+ */
 bool GraphEdgeExists(Graph g, Vertex start, Vertex dest);
 
+/**
+ * Calculates outdegree of a given vertex
+ */
 int outDegree(Graph g, Vertex v);
+
+/**
+ * Calculates indegree for a given vertex
+ */
 int inDegree(Graph g, Vertex w);
 
+/**
+ * Create an array containing indegrees for all vertexed. Indexed by vertex
+ */
 int *inDegreeArray(Graph g);
+
+/**
+ * Creates an array containing outdegrees for all vertexes. Indexed by vertex
+ */
 int *outDegreeArray(Graph g);
 
 #endif

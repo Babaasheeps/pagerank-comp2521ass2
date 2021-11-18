@@ -1,7 +1,7 @@
 // COMP2521 Assignment 2
 
-// Written by:
-// Date:
+// Written by: Hussain Nawaz (z5361515)
+// Date: November 2021
 
 #include <assert.h>
 #include <ctype.h>
@@ -13,33 +13,6 @@
 
 #include "searchdata.h"
 
-typedef struct url_data
-{
-    char *url;
-    long out_degree;
-    double weighted_rank;
-    long matching_searches;
-} url_data;
-typedef struct url_data *UrlData;
-
-UrlData createUrlData(char *url, long out_degree, double weight, long matches);
-UrlData *initUrlRank(char *filename);
-char *copyString(char *str);
-void printUrlData(UrlData *urls);
-void freeUrlData(UrlData data);
-void freeUrlDataArray(UrlData *data);
-// 
-void addSearchMatchesToData(char ***index, UrlData *data, int argc, char *argv[]);
-int findUrlIndex(UrlData *data, char *url);
-int findWordSearchIndex(char ***index, char *target);
-// 
-void sortUrlData(UrlData *data, int n, int (*compare)(UrlData, UrlData));
-void swapUrlData(UrlData *data, int i, int j);
-int compareUrlMatches(UrlData a, UrlData b);
-int compareUrlWeights(UrlData a, UrlData b);
-int compareUrlNames(UrlData a, UrlData b);
-
-void printUrlMatchingOnly(UrlData *data);
 
 int main(int argc, char *argv[])
 {
@@ -244,3 +217,4 @@ void printUrlMatchingOnly(UrlData *data)
         printf("%s\n", data[i]->url);
     }
 }
+

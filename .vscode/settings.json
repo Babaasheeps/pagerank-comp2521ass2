@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "pagerank.h": "c"
+        "pagerank.h": "c",
+        "data.h": "c"
     }
 }

@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include "searchdata.h"
 #include "tokens.h"
 #include "file_utility.h"
 

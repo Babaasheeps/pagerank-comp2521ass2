@@ -7,7 +7,7 @@
 #include <string.h>
 
 #include "file_utility.h"
-#include "tokens.c"
+#include "tokens.h"
 #include "data.h"
 
 

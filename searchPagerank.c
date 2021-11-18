@@ -11,7 +11,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "searchdata.h"
+#include "searchPagerank.h"
+#include "tokens.h"
+#include "file_utility.h"
 
 
 int main(int argc, char *argv[])

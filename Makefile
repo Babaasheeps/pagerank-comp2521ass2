@@ -39,6 +39,8 @@ CFLAGS = -Wall -Werror -g
 SUPPORTING_FILES = data.c Graph.c tokens.c file_utility.c
 # SUPPORTING_FILES2 = searchdata.c
 # SUPPORTING_FILES3 = searchdata.c
+# Give with:
+# give cs2521 ass2 pagerank.c searchPagerank.c searchPagerank.h scaledFootrule.c data.c Graph.c tokens.c file_utility.c Graph.h data.h tokens.h file_utility.h pagerank.h
 
 .PHONY: all
 all: pagerank searchPagerank scaledFootrule

@@ -342,9 +342,10 @@ void swapRanks(Rank *ranks, int i, int j)
 
 void printRankData(Rank *ranks, int n)
 {
+    FILE *f = fopen("pagerankList.txt", "w");
     for (int i = 0; i < n; i++)
     {
-        printf("%s, %d, %.7lf\n",
+        fprintf(f, "%s, %d, %.7lf\n",
                ranks[i]->url,
                ranks[i]->out_degree,
                ranks[i]->rank);

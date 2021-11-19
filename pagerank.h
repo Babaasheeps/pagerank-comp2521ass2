@@ -1,3 +1,12 @@
+/**
+ * @file pagerank.h
+ * @author Hussain Nawaz (z5361616)
+ * @brief Header File for `pagerank.c`. Code used for the calculation
+ * of pageranks.
+ * 
+ * @date November 2021
+ *
+ */
 #ifndef PAGE_RANK_H 
 #define PAGE_RANK_H
 

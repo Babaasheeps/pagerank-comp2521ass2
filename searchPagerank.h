@@ -1,3 +1,11 @@
+/**
+ * @file searchPagerank.h
+ * @author Hussain Nawaz (z5361515)
+ * @brief Header file for `searchPagerank.c`. To implement part-2.
+ * Allows ranking urls by searchterm.
+ * @date November 2021
+ * 
+ */
 #ifndef SEARCH_PAGERANK_H
 #define SEARCH_PAGERANK_H
 

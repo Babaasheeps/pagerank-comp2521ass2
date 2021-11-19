@@ -1,3 +1,14 @@
+/**
+ * @file tokens.h
+ * @author Hussain Nawaz (z5361515)
+ * @brief Implementaion for all `token` functions. A singular `token` is just
+ * a string. `Tokens` refers to a NULL-terminated array of strings.
+ * A `tokensArray` is a NULL terminated array of `tokens` objects.
+ * 
+ * @date November 2021
+ * 
+ */
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>

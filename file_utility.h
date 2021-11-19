@@ -1,4 +1,11 @@
-
+/**
+ * @file file_utility.h
+ * @author Hussain Nawaz - (z5361515)
+ * @brief Header file for `file_utility.c`. These are general purpose
+ * utility functions for file(s) reading and, sanitisation of file data.
+ * @date November 2021
+ * 
+ */
 #ifndef FILE_UTILITY_H
 #define FILE_UTILITY_H
 
@@ -51,12 +58,16 @@ long getFileLength(char *filename);
  */
 char *bufferFile(char *filename, long file_len, bool alnum_only);
 
+
+/**
+ * @brief Reads multiple files to create a matrix of strings where, each
+ * row contains tokenized contents of a single file.
+ * 
+ * @param num_files     - Number of files to read
+ * @param files         - paths of files to open
+ * @return char***      - matrix of strings containing file data
+ */
 char ***filesToTokenMatrix(int num_files, char *files[]);
 
-void printTokensArray(char ***tokens, char *label, bool comma_seperate);
-
-int findMatchingTokenIndex(char **tokens, char *target);
-
-char **fetchUniqueTokensFromTokenArray(char ***tokens);
 
 #endif // !FILE_UTILITY_H

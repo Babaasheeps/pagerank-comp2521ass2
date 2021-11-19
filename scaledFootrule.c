@@ -2,7 +2,7 @@
  * @file scaledFootrule.c
  * @author Hussain Nawaz
  * @brief For UNSW COMP2521T3 ass2. Does Rank Aggregation to minimise
- * rank 
+ * scaledFootRule
  * 
  * @date 2021-11-19
  * 
@@ -142,7 +142,6 @@ void printPermInfo(RankPerm r)
     printf("The following rank has a score of: (%lf)\n", r->rank);
     printTokens(r->tokens, true);
 }
-
 
 void swapPerms(RankPerm *a, RankPerm *b)
 {

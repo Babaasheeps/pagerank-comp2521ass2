@@ -1,3 +1,5 @@
+// UNSW COMP2521 21T3 Starter Code
+
 // Interface to the Undirected Weighted Graph ADT
 // - Vertices are identified by integers between 0 and nV - 1,
 //   where nV is the number of vertices in the graph
@@ -105,7 +107,7 @@ int outDegree(Graph g, Vertex v);
 int inDegree(Graph g, Vertex w);
 
 /**
- * Create an array containing indegrees for all vertexed. Indexed by vertex
+ * Create an array containing indegrees for all vertices. Indexed by vertex
  */
 int *inDegreeArray(Graph g);
 

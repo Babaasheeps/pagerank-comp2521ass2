@@ -1,7 +1,11 @@
-// COMP2521 Assignment 2
-
-// Written by: Hussain Nawaz (z5361515)
-// Date: November 2021
+/**
+ * @file searchPagerank.h
+ * @author Hussain Nawaz (z5361515)
+ * @brief Implementation file for `searchPagerank.c`. To implement part-2.
+ * Allows ranking urls by searchterm.
+ * @date November 2021
+ * 
+ */
 
 #include <assert.h>
 #include <ctype.h>

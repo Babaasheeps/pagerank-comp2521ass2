@@ -1,3 +1,14 @@
+/**
+ * @file tokens.h
+ * @author Hussain Nawaz (z5361515)
+ * @brief Interface for all `token` functions. A singular `token` is just
+ * a string. `Tokens` refers to a NULL-terminated array of strings.
+ * A `tokensArray` is a NULL terminated array of `tokens` objects.
+ * 
+ * @date November 2021
+ * 
+ */
+
 #ifndef TOKENS_H
 #define TOKENS_H
 
@@ -95,20 +106,77 @@ size_t countArrayTokensRow(char ***tokens);
 char *copyString(char *str);
 
 
-
-
+/**
+ * @brief Prints an array of tokens w/ printTokens enacted on each element
+ * of the array
+ * 
+ * @param tokens            - Tokens to print
+ * @param label             - A Label to print beofre and after printing
+ * @param comma_seperate    - Passed to printTokens to determine if shoudl
+ * be comma seperated
+ */
 void printTokensArray(char ***tokens, char *label, bool comma_seperate);
 
+
+/**
+ * @brief Given an array of tokens and a target, returns the index of
+ * the target within the tokens
+ * 
+ * @param tokens    - Tokens to search from
+ * @param target    - Token to search for
+ * @return int      - Index of tokesn
+ */
 int findMatchingTokenIndex(char **tokens, char *target);
 
+
+/**
+ * @brief Returns tokens containing only the unique elements from
+ * an array of tokens 
+ * 
+ * @param tokens 
+ * @return char** 
+ */
 char **fetchUniqueTokensFromTokenArray(char ***tokens);
 
 
+/**
+ * @brief Given a set of tokens, swap the tokens at the index given
+ * 
+ * @param tokens    - Set of tokens 
+ * @param a         - index to swap
+ * @param b         - index to swap
+ */
 void swapTokens(char **tokens, int a, int b);
+
+/**
+ * @brief in-place Bubble-sort for a set of tokens. Sorts using `strcmp`
+ * 
+ * @param tokens        - tokens to sort
+ * @param ascending     - true: ascending order; false: descending
+ */
 void sortTokens(char **tokens, bool ascending);
 
+
+/**
+ * @brief generates and prints all permutations of a given set of elements
+ * with no repeats. Does so `fixing` the first section of the array,
+ * which recieves no changes. Then iteratively making swaps for the next
+ * element of the array and recursing a `fixed` level deeper
+ * 
+ * @param tokens        - tokens to permuate
+ * @param token_len     - number of tokens
+ * @param fixed         - how many elements to `fix` in the array
+ */
 void generatePermutation(char **tokens, int token_len, int fixed);
 
+
+/**
+ * @brief Duplicates a set of tokens. Done by mallocing a newset and
+ * iteratively using copyString
+ * 
+ * @param tokens        - tokens to duplicate
+ * @return char**       - the new, duplicated set of tokens.
+ */
 char **duplicateTokens(char **tokens);
 
 

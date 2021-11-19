@@ -1,3 +1,13 @@
+/**
+ * @file data.h
+ * @author Hussain Nawaz - z5361515
+ * @brief Header file for `data.c`. These functions relate to data
+ * management. Non-generic file-reading for specific webpage formate
+ * as per spec.
+ * @date November 2021
+ * 
+ */
+
 #ifndef READ_DATA
 #define READ_DATA
 

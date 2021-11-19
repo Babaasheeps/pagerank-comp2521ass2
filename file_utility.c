@@ -1,3 +1,12 @@
+/**
+ * @file file_utility.h
+ * @author Hussain Nawaz - (z5361515)
+ * @brief Implementaion file for `file_utility.c`. These are general purpose
+ * utility functions for file(s) reading and, sanitisation of file data.
+ * @date November 2021
+ * 
+ */
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,5 +1,4 @@
 // COMP2521 Assignment 2
-
 // Written by: Hussain Nawaz (z5361515)
 // Date: November 2021
 
@@ -34,9 +33,7 @@ RankPerm permComparison(RankPerm perm1, RankPerm perm2);
 RankPerm newPermutationObject(char **tokens, double weight);
 void printPermInfo(RankPerm r);
 
-
-
-
+void swapPerms(RankPerm *a, RankPerm *b);
 
 int main(int argc, char *argv[])
 {
@@ -155,15 +152,13 @@ RankPerm newPermutationObject(char **tokens, double weight)
     return new;
 }
 
-RankPerm permComparison(RankPerm perm1, RankPerm perm2)
+RankPerm permComparison(RankPerm curr_min, RankPerm new)
 {
     // Choose to keep permutation with a lower score
-    RankPerm min = (perm1->rank < perm2->rank) ? perm1 : perm2;
-    RankPerm loser = (perm1->rank > perm2->rank) ? perm1 : perm2;
-    // Free the loser and return the min
-    freeRankPerm(loser);
-
-    return min;
+    if (new->rank < curr_min->rank)
+        swapPerms(&curr_min, &new);
+        
+    return curr_min;
 }
 
 void freeRankPerm(RankPerm r)
@@ -181,7 +176,7 @@ void printPermInfo(RankPerm r)
 
 void swapPerms(RankPerm *a, RankPerm *b)
 {
-    RankPerm *temp = *a;
+    RankPerm temp = *a;
     *a = *b;
     *b = temp;
 }

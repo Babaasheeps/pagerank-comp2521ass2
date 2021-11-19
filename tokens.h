@@ -93,4 +93,8 @@ int findMatchingTokenIndex(char **tokens, char *target);
 
 char **fetchUniqueTokensFromTokenArray(char ***tokens);
 
+
+void swapTokens(char **tokens, int a, int b);
+void sortTokens(char **tokens, bool ascending);
+
 #endif // !TOKENS_H

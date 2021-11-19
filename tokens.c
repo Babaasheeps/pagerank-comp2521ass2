@@ -173,3 +173,27 @@ char *copyString(char *str)
     return new;
 }
 
+void sortTokens(char **tokens, bool ascending)
+{
+    int n = (int)countTokens(tokens);
+    bool is_sorted = false;
+    while (!is_sorted)
+    {
+        is_sorted = true;
+        for (int i = 0; i < n - 1; i++)
+        {
+            if ((strcmp(tokens[i], tokens[i + 1]) < 0) != ascending)
+            {
+                swapTokens(tokens, i, i + 1);
+                is_sorted = false;
+            }
+        }
+    }
+}
+
+void swapTokens(char **tokens, int a, int b)
+{
+    char *temp = tokens[a];
+    tokens[a] = tokens[b];
+    tokens[b] = temp;
+}

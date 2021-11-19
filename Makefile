@@ -27,7 +27,7 @@
 #    the ex1, ex2 and ex3 directories. Change into these directories
 #    and run your programs (e.g., ./pagerank)
 
-CC = dcc
+CC = gcc
 CFLAGS = -Wall -Werror -g
 
 # Notes:

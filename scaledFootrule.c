@@ -1,18 +1,14 @@
 /**
  * @file scaledFootrule.c
- * @author Hu
- * @brief 
- * @version 0.1
- * @date 2021-11-19
+ * @author Hussain Nawaz
+ * @brief For UNSW COMP2521T3 ass2. Does Rank Aggregation to minimise
+ * rank 
  * 
- * @copyright Copyright (c) 2021
+ * @date 2021-11-19
  * 
  */
 
 
-// COMP2521 Assignment 2
-// Written by: Hussain Nawaz (z5361515)
-// Date: November 2021
 
 #include <assert.h>
 #include <ctype.h>
@@ -21,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 
 #include "tokens.h"
 #include "file_utility.h"
@@ -45,8 +42,6 @@ int main(int argc, char *argv[])
 
     min = findMinimumScaledFootrulePermutation(urls, num_urls, 0, ranks, min);
 
-    // TODO: Sanitised print
-    printf("---\n---\nThe  min object is:\n");
     printPermInfo(min);
 
     freeTokens(urls);
@@ -68,15 +63,9 @@ RankPerm findMinimumScaledFootrulePermutation(char **tokens,
     if (fixed >= token_len)
     {
         double W = scaledFootRuleSum(rankings, tokens);
-
-        printTokens(tokens, true);
-        printf("Total FootRule is %lf\n", W);
-        printf("FOR THE MIN:");
         
         RankPerm temp = newPermutationObject(tokens, W);
-        // printPermInfo(min);
-        min = permComparison(min, temp);
-
+        min = permComparison(temp, min);
         return min;
     }
 

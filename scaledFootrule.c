@@ -29,22 +29,18 @@ int main(int argc, char *argv[])
     char ***ranks = filesToTokenMatrix(argc, argv);
     char **urls = fetchUniqueTokensFromTokenArray(ranks);
     int num_urls = countTokens(urls);
-
-    printf("TOKEN LENght is %d\n", num_urls);
     sortTokens(urls, true);
 
-    printTokensArray(ranks, "RANKS", true);
-    printf("Sorted version is:\n");
-    printTokens(urls, true);
     // Want to set an initially minimum array. Will be replace by true min
     double ordered_W = scaledFootRuleSum(ranks, urls);
     RankPerm min = newPermutationObject(urls, ordered_W);
-
+    // Find best permutation
     min = findMinimumScaledFootrulePermutation(urls, num_urls, 0, ranks, min);
-
-    printPermInfo(min);
+    
+    printFinalOutput(min);
 
     freeTokens(urls);
+    freeRankPerm(min);
     freeTokensArray(ranks);
 
     return 0;
@@ -155,3 +151,9 @@ void swapPerms(RankPerm *a, RankPerm *b)
     *b = temp;
 }
 
+void printFinalOutput(RankPerm r)
+{
+    printf("%.6lf\n", r->rank);
+    for (int i = 0; r->tokens[i] != NULL; i++)
+        printf("%s\n", r->tokens[i]);
+}

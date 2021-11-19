@@ -35,10 +35,6 @@ void printPermInfo(RankPerm r);
 
 void swapPerms(RankPerm *a, RankPerm *b);
 
-
-
-
-
-
+void printFinalOutput(RankPerm r);
 
 #endif // !SCALED_FOOTRULE_H

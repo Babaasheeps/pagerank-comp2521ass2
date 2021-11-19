@@ -178,13 +178,6 @@ void printRankData(Rank *ranks, int n);
 int compare_rank(const void * a, const void * b);
 
 
-/**
- * @brief Given a string, mallocs a copy of it and returns it
- * 
- * @param str  - string to copy
- * @return char* - copy of string
- */
-char *copyString(char *str);
 
 /**
  * @brief Calculate Page Rank as per PageRank Spec

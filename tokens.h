@@ -76,5 +76,21 @@ char ***reTokenize(char **tokens, char *sep);
 size_t countTokens(char **tokens);
 
 
+/**
+ * @brief Creates a copy of a string by value.
+ * 
+ * @param str  - string to copy
+ * @return char* - copy of string
+ */
+char *copyString(char *str);
+
+
+
+
+void printTokensArray(char ***tokens, char *label, bool comma_seperate);
+
+int findMatchingTokenIndex(char **tokens, char *target);
+
+char **fetchUniqueTokensFromTokenArray(char ***tokens);
 
 #endif // !TOKENS_H

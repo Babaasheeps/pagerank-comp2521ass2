@@ -145,17 +145,7 @@ UrlData createUrlData(char *url, long out_degree, double weight, long matches)
     return data;
 }
 
-char *copyString(char *str)
-{
-    if(str == NULL)
-        return NULL;
-    int new_len = strlen(str) + 1;
-    char *new = malloc(sizeof(char) * (new_len));
-    assert(new != NULL);
-    strncpy(new, str, new_len);
 
-    return new;
-}
 
 void printUrlData(UrlData *urls)
 {

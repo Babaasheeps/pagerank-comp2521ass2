@@ -24,6 +24,23 @@ char **fileToLineTokens(char *filename)
     return line_tokens;
 }
 
+char ***filesToTokenMatrix(int num_files, char *files[])
+{
+    // Create space for the token matrix
+    char ***file_tokens = malloc(sizeof(char **) * (num_files + 1));
+
+    // Let each token in the matrix hold line tokens for a file
+    int i;
+    for (i = 0; i < num_files; i++)
+    {
+        file_tokens[i] = fileToLineTokens(files[i]);
+    }
+    // Null terminate the tokens
+    file_tokens[i] = NULL;
+
+    return file_tokens;
+}
+
 long fileNumLines(char *filename)
 {
     FILE *f = fopen(filename, "r");

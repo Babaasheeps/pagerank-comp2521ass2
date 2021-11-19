@@ -4,6 +4,7 @@
         "data.h": "c",
         "searchdata.h": "c",
         "string.h": "c",
-        "tokens.h": "c"
+        "tokens.h": "c",
+        "stdlib.h": "c"
     }
 }

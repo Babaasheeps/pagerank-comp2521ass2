@@ -51,5 +51,12 @@ long getFileLength(char *filename);
  */
 char *bufferFile(char *filename, long file_len, bool alnum_only);
 
+char ***filesToTokenMatrix(int num_files, char *files[]);
+
+void printTokensArray(char ***tokens, char *label, bool comma_seperate);
+
+int findMatchingTokenIndex(char **tokens, char *target);
+
+char **fetchUniqueTokensFromTokenArray(char ***tokens);
 
 #endif // !FILE_UTILITY_H

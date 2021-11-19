@@ -378,17 +378,6 @@ Rank newRank(char *url, int out_degree, double rank)
     new->rank = rank;
     return new;
 }
-char *copyString(char *str)
-{
-    if(str == NULL)
-        return NULL;
-    int new_len = strlen(str) + 1;
-    char *new = malloc(sizeof(char) * (new_len));
-    assert(new != NULL);
-    strncpy(new, str, new_len);
-
-    return new;
-}
 
 double **double2dArray(int h, int w, int initial)
 {

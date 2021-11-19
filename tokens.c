@@ -75,6 +75,21 @@ void printTokens(char **tokens, bool is_comma_seperated)
         printf("\t NULL\n]\n");
 }
 
+void printTokensArray(char ***tokens, char *label, bool comma_seperate)
+{
+    if (tokens == NULL)
+        return;
+
+    if (label != NULL)
+        printf("Printing Token Array: '%s':\n", label); 
+    
+    for (int i = 0; tokens[i] != NULL; i++)
+        printTokens(tokens[i], comma_seperate);
+    printf("[ NULL ] \n");
+    if (label != NULL)
+        printf("Finished Token Array '%s'.\n", label);
+}
+
 size_t countTokens(char **tokens)
 {
     if (tokens == NULL)
@@ -98,3 +113,63 @@ void freeTokensArray(char ***tokens)
         freeTokens(tokens[i]);
     free(tokens);
 }
+
+
+char **fetchUniqueTokensFromTokenArray(char ***tokens)
+{
+    // Count the total number of tokens in all arrays
+    size_t max_tokens = 0;
+    for (int i = 0; tokens[i] != NULL; i++)
+        max_tokens += countTokens(tokens[i]);
+    // Make enough space for worst case where every token is unique
+    char **unique = malloc(sizeof(char *) * (max_tokens + 1));
+
+    // For safety: Ensure always NULL-termed, even if extra terms added
+    for (int i = 0; i < max_tokens; i++)
+        unique[i] = NULL;
+
+    size_t num_unique = 0;
+    // For every token in array, check if its unique. If so, add to set of unique
+    for (int i = 1; tokens[i] != NULL; i++)
+    {
+        for (int j = 0; tokens[i][j] != NULL; j++)
+        {
+            int token_index = findMatchingTokenIndex(unique, tokens[i][j]);
+            if (token_index != -1)      // Match found. Not unique
+                continue;
+            // Add token to set of unique tokens. Create by value, not ref
+            unique[num_unique] = copyString(tokens[i][j]);
+            num_unique++;
+            unique[num_unique] = NULL; // Keep NULL-terminated
+        }
+    }
+    unique[num_unique] = NULL;
+    return unique;
+}
+
+int findMatchingTokenIndex(char **tokens, char *target)
+{
+    if (target == NULL || tokens == NULL)
+        return -1;
+
+    for (int i = 0; tokens[i] != NULL; i++)
+    {
+        if (!strcmp(tokens[i], target))
+            return i;
+    }
+    return -1;
+}
+
+
+char *copyString(char *str)
+{
+    if(str == NULL)
+        return NULL;
+    int new_len = strlen(str) + 1;
+    char *new = malloc(sizeof(char) * (new_len));
+    assert(new != NULL);
+    strncpy(new, str, new_len);
+
+    return new;
+}
+

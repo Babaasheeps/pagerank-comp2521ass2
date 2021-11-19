@@ -31,6 +31,8 @@ int main(int argc, char *argv[])
     printf("GENERATE_PERMUTATION!\n");
     generatePermutation(urls, num_urls, 0);
 
+    printf("\nAFTER PERMS:\n");
+    printTokens(urls, true);
     freeTokens(urls);
     freeTokensArray(ranks);
 
@@ -43,7 +45,7 @@ int main(int argc, char *argv[])
 
 void generatePermutation(char **tokens, int token_len, int fixed)
 {
-    if (fixed >= token_len + 1)
+    if (fixed == token_len)
     {
         printTokens(tokens, true);
         return;
@@ -53,8 +55,9 @@ void generatePermutation(char **tokens, int token_len, int fixed)
     for (int i = fixed + 1; i < token_len; i++)
     {
         swapTokens(tokens, i, fixed);
-        generatePermutation(tokens, token_len, fixed + 1);
-        swapTokens(tokens, i, fixed + 1);
+        generatePermutation(tokens, token_len, fixed);
+        swapTokens(tokens, i, fixed);
+        // printTokens(tokens, true);
     }
 }
 

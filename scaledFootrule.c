@@ -1,3 +1,15 @@
+/**
+ * @file scaledFootrule.c
+ * @author Hu
+ * @brief 
+ * @version 0.1
+ * @date 2021-11-19
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
+
 // COMP2521 Assignment 2
 // Written by: Hussain Nawaz (z5361515)
 // Date: November 2021
@@ -12,28 +24,7 @@
 
 #include "tokens.h"
 #include "file_utility.h"
-
-struct rank_permutation
-{
-    double rank;
-    char **tokens;
-};
-typedef struct rank_permutation *RankPerm;
-
-double scaledFootRuleSum(char ***indexes, char **P);
-double calculateScaledFootRule(char **tao, char **P, int total_urls);
-RankPerm findMinimumScaledFootrulePermutation(char **tokens,
-                                              int token_len,
-                                              int fixed,
-                                              char ***rankings,
-                                              RankPerm min);
-
-void freeRankPerm(RankPerm r);
-RankPerm permComparison(RankPerm perm1, RankPerm perm2);
-RankPerm newPermutationObject(char **tokens, double weight);
-void printPermInfo(RankPerm r);
-
-void swapPerms(RankPerm *a, RankPerm *b);
+#include "scaledFootrule.h"
 
 int main(int argc, char *argv[])
 {
@@ -48,19 +39,16 @@ int main(int argc, char *argv[])
     printTokensArray(ranks, "RANKS", true);
     printf("Sorted version is:\n");
     printTokens(urls, true);
-
-    printf("GENERATE_PERMUTATION!\n");
     // Want to set an initially minimum array. Will be replace by true min
     double ordered_W = scaledFootRuleSum(ranks, urls);
     RankPerm min = newPermutationObject(urls, ordered_W);
 
     min = findMinimumScaledFootrulePermutation(urls, num_urls, 0, ranks, min);
 
-    printf("---\n---\nThe FINAL min object is:\n");
+    // TODO: Sanitised print
+    printf("---\n---\nThe  min object is:\n");
     printPermInfo(min);
 
-    printf("\nAFTER PERMS:\n");
-    printTokens(urls, true);
     freeTokens(urls);
     freeTokensArray(ranks);
 
@@ -86,7 +74,7 @@ RankPerm findMinimumScaledFootrulePermutation(char **tokens,
         printf("FOR THE MIN:");
         
         RankPerm temp = newPermutationObject(tokens, W);
-        printPermInfo(min);
+        // printPermInfo(min);
         min = permComparison(min, temp);
 
         return min;
@@ -104,7 +92,6 @@ RankPerm findMinimumScaledFootrulePermutation(char **tokens,
 
 double scaledFootRuleSum(char ***indexes, char **P)
 {
-    printTokensArray(indexes, "TAO ARRAY", true);
     int num_indexes = countArrayTokensRow(indexes);
     int total_urls = countTokens(P);
 
@@ -112,8 +99,6 @@ double scaledFootRuleSum(char ***indexes, char **P)
     // For all Tao pages in set of pages, sum their footRoot
     for (int i = 0; i < num_indexes; i++)
     {
-        printf("SEEEKIGN FROM:\n");
-        printTokens(indexes[i], true);
         W += calculateScaledFootRule(indexes[i], P, total_urls);
     }
 
@@ -180,12 +165,4 @@ void swapPerms(RankPerm *a, RankPerm *b)
     *a = *b;
     *b = temp;
 }
-
-// void swapDoublePointers(double **a, double **b)
-// {
-//     double *temp = *a;
-//     *a = *b;
-//     *b = temp;
-// }
-
 

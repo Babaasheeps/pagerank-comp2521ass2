@@ -197,3 +197,48 @@ void swapTokens(char **tokens, int a, int b)
     tokens[a] = tokens[b];
     tokens[b] = temp;
 }
+
+
+void generateTokenPermutation(char **tokens, int token_len, int fixed)
+{
+    // Have recursed to end. Elements are swapped in place, so need 
+    // for an explicit backtrace. Can perform whatever action you want
+    if (fixed >= token_len)
+    {
+        printTokens(tokens, true);
+        return;
+    }
+
+    for (int i = fixed; i < token_len; i++)
+    {
+        swapTokens(tokens, fixed, i);
+        generateTokenPermutation(tokens, token_len, fixed + 1);
+        // Want to reset after a call s.t. the array is preserved
+        swapTokens(tokens, fixed, i);
+    }
+}
+
+size_t countArrayTokensRow(char ***tokens)
+{
+    if (tokens == NULL)
+        return 0;
+
+    size_t i;
+    for (i = 0; tokens[i] != NULL; i++)
+        ;
+    return i;
+}
+
+
+char **duplicateTokens(char **tokens)
+{
+    int num_toks = countTokens(tokens);
+    char **new = malloc(sizeof(char *) * (num_toks + 1));
+    
+    for (int i = 0; tokens[i] != NULL; i++)
+    {
+        new[i] = copyString(tokens[i]);
+    }
+    new[num_toks] = NULL;
+    return new;
+}

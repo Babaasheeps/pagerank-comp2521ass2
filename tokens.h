@@ -77,6 +77,16 @@ size_t countTokens(char **tokens);
 
 
 /**
+ * @brief Counts the number of `tokens` sets in the NULL-terminated
+ * array of tokens
+ * 
+ * @param tokens - Array to count
+ * @return size_t  - Number of `char **tokens` elements in the array
+ */
+size_t countArrayTokensRow(char ***tokens);
+
+
+/**
  * @brief Creates a copy of a string by value.
  * 
  * @param str  - string to copy
@@ -96,5 +106,10 @@ char **fetchUniqueTokensFromTokenArray(char ***tokens);
 
 void swapTokens(char **tokens, int a, int b);
 void sortTokens(char **tokens, bool ascending);
+
+void generatePermutation(char **tokens, int token_len, int fixed);
+
+char **duplicateTokens(char **tokens);
+
 
 #endif // !TOKENS_H
